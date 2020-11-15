@@ -7,6 +7,10 @@ export const ROUTER_ADDRESS = '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
+export const APEX_TOKEN_ADRESS = '0x3Bdea1232b091e059C1429c9f6eB25DA929DE91C'
+
+export const APEX_MAIN_ADRESS = '0x3Bdea1232b091e059C1429c9f6eB25DA929DE91C'
+
 // a list of tokens by chain
 type ChainTokenList = {
   readonly [chainId in ChainId]: Token[]

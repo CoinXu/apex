@@ -1,11 +1,53 @@
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, AppState } from '../index'
+import { Web3Provider } from '@ethersproject/providers'
+import { Contract } from 'web3-eth-contract'
 import * as models from './model'
-import { fetchShareCode, consumeShareCode} from './actions'
+import { getEarned } from '../../hooks/apex'
+import { getApexMasterContract, getApexTokenContract } from '../../utils'
+import { 
+  fetchShareCode, consumeShareCode, 
+  createApexMainContract, createApexTokenContract 
+} from './actions'
 
 export function useApexState(): AppState['apex'] {
   return useSelector<AppState, AppState['apex']>(state => state.apex)
+}
+
+export function useApexGetEarned() {
+  const dispatch = useDispatch<AppDispatch>()
+
+  return useCallback(
+    async (contract: Contract, account: string) => {
+      const result = await getEarned(contract, account)
+      debugger
+      console.debug(result)
+    },
+    [dispatch]
+  )
+}
+
+export function useCreateApexMainContractCallback(libray?: Web3Provider) {
+  const dispatch = useDispatch<AppDispatch>()
+
+  return useCallback(
+    () => {
+      dispatch(createApexMainContract({ contract: getApexMasterContract(libray) }))
+    },
+    [dispatch]
+  )
+}
+
+export function useCreateApexTokenContractCallback(libray?: Web3Provider) {
+  const dispatch = useDispatch<AppDispatch>()
+
+  return useCallback(
+    () => {
+      dispatch(createApexTokenContract({ contract: getApexTokenContract(libray) }))
+    },
+    [dispatch]
+  )
 }
 
 export function useGetShareCodeCallback() {

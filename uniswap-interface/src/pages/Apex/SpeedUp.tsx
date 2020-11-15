@@ -4,11 +4,18 @@ import { Box } from 'rebass'
 import { TYPE } from '../../theme'
 import Card from '../../components/Card'
 import { ButtonPrimary } from '../../components/Button'
+import { deposit } from '../../hooks/apex'
+import { useActiveWeb3React } from '../../hooks'
+import { useApexState } from '../../state/apex/hooks'
+import { APEX_MAIN_ADRESS } from '../../constants'
 
 import ApexCoin from '../../assets/images/apex/apex_coin.png'
 import ApexCoinGray from '../../assets/images/apex/apex_coin_gray.png'
 
 export default function SpeedUp() {
+  const state = useApexState()
+  const { account } = useActiveWeb3React()
+
   return (
     <>
       <Card border="1px solid green">
@@ -39,6 +46,10 @@ export default function SpeedUp() {
           </Box>
           <Box>
             <ButtonPrimary 
+              onClick={() => {
+                if (!state.mainContract || !account) return
+                deposit(state.mainContract, account, APEX_MAIN_ADRESS)
+              }}
               padding="2px 4px" 
               width="100%"
               borderRadius="4px">

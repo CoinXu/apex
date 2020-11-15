@@ -4,9 +4,13 @@ import { AddressZero } from '@ethersproject/constants'
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
 import { BigNumber } from '@ethersproject/bignumber'
 import { abi as IUniswapV2Router02ABI } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
-import { ROUTER_ADDRESS } from '../constants'
+import { abi as ApexTokenABI } from '../constants/abis/apex_token.json'
+import { abi as ApexMasterABI } from '../constants/abis/apex_master_chef.json'
+import { ROUTER_ADDRESS, APEX_MAIN_ADRESS, APEX_TOKEN_ADRESS } from '../constants'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from '@uniswap/sdk'
 import { TokenAddressMap } from '../state/lists/hooks'
+import Web3 from 'web3'
+import { Contract as ETHContract } from 'web3-eth-contract'
 
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value: any): string | false {
@@ -95,6 +99,22 @@ export function getContract(address: string, ABI: any, library: Web3Provider, ac
   }
 
   return new Contract(address, ABI, getProviderOrSigner(library, account) as any)
+}
+
+export function getApexTokenContract(library?: Web3Provider): ETHContract {
+  const w3: any = window.web3
+  const web3 = new Web3(library || w3.currentProvider)
+  // @ts-ignore
+  const contract = new web3.eth.Contract(ApexTokenABI, APEX_TOKEN_ADRESS)
+  return contract
+}
+
+export function getApexMasterContract(library?: Web3Provider): ETHContract {
+  const w3: any = window.web3
+  const web3 = new Web3(library || w3.currentProvider)
+  // @ts-ignore
+  const contract = new web3.eth.Contract(ApexMasterABI, APEX_MAIN_ADRESS)
+  return contract
 }
 
 // account is optional

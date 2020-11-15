@@ -1,9 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import { ButtonPrimary } from '../../components/Button'
 import Card from '../../components/Card'
 import { Box } from 'rebass'
-import styled, { } from 'styled-components'
+import styled from 'styled-components'
+import { useActiveWeb3React } from '../../hooks'
+import { stake } from '../../hooks/apex'
+import { useApexState } from '../../state/apex/hooks'
+// import { APEX_MAIN_ADRESS } from '../../constants'
 
 const StyledBalanceMax = styled.button<{ 
   width?: string, 
@@ -41,6 +45,7 @@ export interface CurrencyInputGroupOption {
   helpButtonText: string;
   placeholder?: string;
   onUserInput(value: string): void;
+  onButtonClick(value: string): void;
 }
 
 export function CurrencyInputGroup({
@@ -48,8 +53,10 @@ export function CurrencyInputGroup({
   helpButtonText,
   buttonText,
   placeholder,
-  onUserInput
+  onUserInput,
+  onButtonClick
 }: CurrencyInputGroupOption) {
+  const [v, setState] = useState<string>("" + value)
   return (
     <Box sx={{
       display: 'grid',
@@ -59,9 +66,10 @@ export function CurrencyInputGroup({
       <Box>
         <NumericalInput
           style={{ width: '100%' }}
-          value={value}
+          value={v}
           placeholder={placeholder}
           onUserInput={val => {
+            setState(val)
             onUserInput(val)
           }}
         />
@@ -71,6 +79,7 @@ export function CurrencyInputGroup({
       </Box>
       <Box>
         <ButtonPrimary 
+          onClick={() => onButtonClick(v)}
           padding="2px 4px" 
           width="100%"
           borderRadius="4px">
@@ -82,6 +91,9 @@ export function CurrencyInputGroup({
 }
 
 export default function Pledge() {
+  const state = useApexState()
+  const { account } = useActiveWeb3React()
+  
   return (
     <Card border="1px solid green">
       <CurrencyInputGroup
@@ -89,6 +101,10 @@ export default function Pledge() {
         helpButtonText="max"
         buttonText="质押"
         placeholder="请输入金额"
+        onButtonClick={(value: string) => {
+          if (!state.mainContract || !account) return
+          stake(state.mainContract, parseFloat(value), account)
+        }}
         onUserInput={() => { }} />
     </Card>
   )

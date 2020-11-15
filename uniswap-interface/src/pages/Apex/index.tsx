@@ -11,18 +11,55 @@ import UnlockPledge from './UnlockPledge'
 import Apex from './Apex'
 import Top10 from './Top10'
 import Intro from './Intro'
-
+import { harvest } from '../../hooks/apex'
 import { useActiveWeb3React } from '../../hooks'
-import { useGetShareCodeCallback, useConsumeShareCodeCallback, useApexState } from '../../state/apex/hooks'
+import { 
+  useGetShareCodeCallback, useConsumeShareCodeCallback, useApexState,
+  useCreateApexMainContractCallback, useCreateApexTokenContractCallback,
+  useApexGetEarned
+} from '../../state/apex/hooks'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
+// import { APEX_MAIN_ADRESS } from '../../constants'
+// import { abi as ApexMasterABI } from '../../constants/abis/apex_master_chef.json'
+// import Web3 from 'web3'
+// import { getEarned as _getEarned } from '../../hooks/apex'
 
 import ApexBanner0 from '../../assets/images/apex/apex_banner_0.png'
 
 function Invitation() {
   const state = useApexState()
   const link: string = `${window.location.origin}/#/${state.shareCode || ""}`
-  const { account } = useActiveWeb3React()
+  const { account, library } = useActiveWeb3React()
+  const qs = useParsedQueryString()
   const getShareCode = useGetShareCodeCallback()
+  const createApexMainContract = useCreateApexMainContractCallback(library)
+  const createApexTokenContract = useCreateApexTokenContractCallback(library)
+  const consumeShareCode = useConsumeShareCodeCallback()
+  const getEarned = useApexGetEarned()
+
+  useEffect(() => {
+      if (!state.mainContract) {
+        createApexMainContract()
+      }
+  }, [createApexMainContract, account, state.mainContract, window.web3])
+
+  useEffect(() => {
+    if (!state.tokenContract) {
+      createApexTokenContract()
+    }
+  }, [createApexTokenContract, account, state.tokenContract, window.web3])
+
+  useEffect(() => {
+    if (state.mainContract && account) {
+      // const w3: any = window.web3
+      // const web3 = new Web3(w3.currentProvider)
+      // // @ts-ignore
+      // const contract = new web3.eth.Contract(ApexMasterABI, APEX_MAIN_ADRESS)
+      // debugger
+      // deposit(contract, account, APEX_MAIN_ADRESS)
+      getEarned(state.mainContract, account)
+    }
+  }, [getEarned, state.mainContract, account])
 
   useEffect(() => {
     if (account) {
@@ -30,8 +67,6 @@ function Invitation() {
     }
   }, [getShareCode, account, state.consumed])
 
-  const qs = useParsedQueryString()
-  const consumeShareCode = useConsumeShareCodeCallback()
   useEffect(() => {
     if (qs.shareCode) {
       consumeShareCode(qs.shareCode as string)
@@ -71,6 +106,7 @@ function Invitation() {
           </Box>
           <Box>
             <ButtonPrimary
+              onClick={() => state.mainContract && account && harvest(state.mainContract, account)}
               padding="2px 4px"
               width="80px"
               borderRadius="4px">
