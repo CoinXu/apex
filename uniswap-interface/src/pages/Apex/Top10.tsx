@@ -17,7 +17,7 @@ const Counter = styled(TYPE.largeHeader)`
 
 export default function Top10() {
   return (
-    <Card>
+    <Card border="1px solid green">
       <TYPE.largeHeader textAlign="center">Top10 竞赛排名</TYPE.largeHeader>
       <TYPE.mediumHeader textAlign="center">倒计时</TYPE.mediumHeader>
       <Counter pt={16} textAlign="center">88:06:06:06</Counter>

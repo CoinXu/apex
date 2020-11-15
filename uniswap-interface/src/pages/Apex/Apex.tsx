@@ -1,6 +1,6 @@
 import React from 'react'
 import Card from '../../components/Card'
-import { ButtonEmpty } from '../../components/Button'
+import Copy from '../../components/AccountDetails/Copy'
 import { IconWrapper } from '../../theme/components'
 import { TYPE } from '../../theme'
 import { Box } from 'rebass'
@@ -9,8 +9,10 @@ import ApexCoin from '../../assets/images/apex/apex_coin.png'
 import ETHCoin from '../../assets/images/apex/eth_coin.png'
 
 export default function Apex() {
+  const address: string = 'xxxx'
+
   return (
-    <Card>
+    <Card border="1px solid green">
       <TYPE.subHeader>APEX</TYPE.subHeader>
       <Box
         pt={20}
@@ -27,13 +29,8 @@ export default function Apex() {
           justifyContent: 'space-between',
           gridTemplateColumns: 'auto auto'
         }}>
-          <TYPE.gray>xxxxx</TYPE.gray>
-          <ButtonEmpty
-            padding="2px 4px"
-            width="100%"
-            borderRadius="4px">
-            copy
-          </ButtonEmpty>
+          <TYPE.gray>{address}</TYPE.gray>
+          <Copy toCopy={address}>复制</Copy>
         </Box>
         <Box>发行总量：</Box>
         <Box>888</Box>

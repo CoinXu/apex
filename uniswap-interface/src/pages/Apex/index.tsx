@@ -1,7 +1,9 @@
-import React, { } from 'react'
+import React, { useEffect } from 'react'
+import { Redirect, RouteComponentProps } from 'react-router-dom'
 import Card from '../../components/Card'
-import { Flex, Box, Image } from 'rebass'
-import { ButtonPrimary, ButtonEmpty } from '../../components/Button'
+import { Box, Image } from 'rebass'
+import { ButtonPrimary } from '../../components/Button'
+import Copy from '../../components/AccountDetails/Copy'
 import { TYPE } from '../../theme'
 import SpeedUp from './SpeedUp'
 import Pledge from './Pledge'
@@ -10,32 +12,64 @@ import Apex from './Apex'
 import Top10 from './Top10'
 import Intro from './Intro'
 
+import { useActiveWeb3React } from '../../hooks'
+import { useGetShareCodeCallback, useConsumeShareCodeCallback, useApexState } from '../../state/apex/hooks'
+import useParsedQueryString from '../../hooks/useParsedQueryString'
+
 import ApexBanner0 from '../../assets/images/apex/apex_banner_0.png'
 
 function Invitation() {
+  const state = useApexState()
+  const link: string = `${window.location.origin}/#/${state.shareCode || ""}`
+  const { account } = useActiveWeb3React()
+  const getShareCode = useGetShareCodeCallback()
+
+  useEffect(() => {
+    if (account) {
+      getShareCode(account)
+    }
+  }, [getShareCode, account, state.consumed])
+
+  const qs = useParsedQueryString()
+  const consumeShareCode = useConsumeShareCodeCallback()
+  useEffect(() => {
+    if (qs.shareCode) {
+      consumeShareCode(qs.shareCode as string)
+    }
+  }, [consumeShareCode, qs.shareCode])
+
   return (
     <>
-      <Card>
-        <Flex>
-          <Box
-            width={3 / 5}>
+      <Card border="1px solid green">
+        <Box sx={{
+          display: 'grid',
+          gridTemplateColumns: 'auto auto',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          columnGap: '12px'
+        }}>
+          <Box>
             <TYPE.black>推荐链接</TYPE.black>
-            <TYPE.link>https://apex.com</TYPE.link>
+            <TYPE.link style={{ wordBreak: 'break-word' }}>{link}</TYPE.link>
           </Box>
-          <Box
-            width={2 / 5}>
-            <ButtonEmpty>邀请好友分享复制</ButtonEmpty>
+          <Box>
+            <Copy toCopy={link}>
+              邀请好友<br />分享复制
+            </Copy>
           </Box>
-        </Flex>
-        <Flex>
-          <Box
-            width={3 / 5}>
+        </Box>
+        <Box mt={36} sx={{
+          display: 'grid',
+          gridTemplateColumns: 'auto auto',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          columnGap: '12px'
+        }}>
+          <Box>
             <TYPE.subHeader>APEX: 8888</TYPE.subHeader>
             <TYPE.subHeader>≈$888</TYPE.subHeader>
           </Box>
-          <Box
-            style={{ textAlign: "center" }}
-            width={2 / 5}>
+          <Box>
             <ButtonPrimary
               padding="2px 4px"
               width="80px"
@@ -43,7 +77,7 @@ function Invitation() {
               提现
             </ButtonPrimary>
           </Box>
-        </Flex>
+        </Box>
       </Card>
     </>
   )
@@ -52,7 +86,7 @@ function Invitation() {
 function CurrencyPreview() {
   return (
     <>
-      <Card>
+      <Card border="1px solid green">
         <Box sx={{
           display: 'grid',
           gridTemplateColumns: '80px auto',
@@ -85,6 +119,27 @@ function CurrencyPreview() {
   )
 }
 
+export function RedirectToApex(props: RouteComponentProps<{ shareCode: string }>) {
+  const {
+    location: { search },
+    match: {
+      params: { shareCode }
+    }
+  } = props
+
+  return (
+    <Redirect
+      to={{
+        ...props.location,
+        pathname: '/',
+        search:
+          search && search.length > 1
+            ? `${search}&shareCode=${shareCode}`
+            : `?shareCode=${shareCode}`
+      }}
+    />
+  )
+}
 
 export default function () {
   return (
@@ -93,13 +148,27 @@ export default function () {
         src={ApexBanner0}
         alt="APEX"
         sx={{ width: ['100%', 'auto'] }} />
-      <Invitation />
-      <CurrencyPreview />
-      <SpeedUp />
-      <Pledge />
-      <UnlockPledge />
-      <Apex />
-      <Top10 />
+      <Box width="100%" pt={24}>
+        <Invitation />
+      </Box>
+      <Box width="100%" pt={24}>
+        <CurrencyPreview />
+      </Box>
+      <Box width="100%" pt={24}>
+        <SpeedUp />
+      </Box>
+      <Box width="100%" pt={12}>
+        <Pledge />
+      </Box>
+      <Box width="100%" pt={12}>
+        <UnlockPledge />
+      </Box>
+      <Box width="100%" pt={24}>
+        <Apex />
+      </Box>
+      <Box width="100%" pt={24}>
+        <Top10 />
+      </Box>
       <Intro />
     </>
   )
