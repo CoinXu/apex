@@ -28,6 +28,7 @@ import useParsedQueryString from '../../hooks/useParsedQueryString'
 import ApexBanner0 from '../../assets/images/apex/apex_banner_0.png'
 import ApexBanner1 from '../../assets/images/apex/apex_banner_1.png'
 import ApexBanner2 from '../../assets/images/apex/apex_banner_2.png'
+import ApexHeaderIcon from '../../assets/images/apex/marginalia-bitcoin-minin.png'
 
 import { Carousel } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -142,7 +143,7 @@ function Invitation() {
               borderRadius="15px">
               <TYPE.main color="primary1" fontSize={18}>
                 提现
-                </TYPE.main>
+              </TYPE.main>
             </ButtonPrimary>
           </Box>
         </Box>
@@ -194,11 +195,14 @@ function CurrencyPreview() {
           }}>
             <ButtonPrimary
               onClick={() => state.mainContract && account && claimLP(state.mainContract, account)}
-              padding="2px 4px"
+              padding="0px 4px"
               width="60px"
               mr="10px"
-              borderRadius="4px">
-              提奖
+              style={{ backgroundColor: '#DFF0E9' }}
+              borderRadius="15px">
+              <TYPE.main color="primary1" fontSize={18}>
+                提奖
+              </TYPE.main>
             </ButtonPrimary>
             <TYPE.blue>{bonus} USD</TYPE.blue>
           </Box>
@@ -233,26 +237,69 @@ export function RedirectToApex(props: RouteComponentProps<{ shareCode: string }>
 export default function () {
   return (
     <>
-      <Carousel nextIcon={null} prevIcon={null} style={{ width: '100%' }}>
-        <Carousel.Item>
-          <Image
-            src={ApexBanner0}
-            alt="APEX"
-            sx={{ width: ['100%', 'auto'], borderRadius: '12px' }} />
-        </Carousel.Item>
-        <Carousel.Item>
-          <Image
-            src={ApexBanner1}
-            alt="APEX"
-            sx={{ width: ['100%', 'auto'], borderRadius: '12px' }} />
-        </Carousel.Item>
-        <Carousel.Item>
-          <Image
-            src={ApexBanner2}
-            alt="APEX"
-            sx={{ width: ['100%', 'auto'], borderRadius: '12px' }} />
-        </Carousel.Item>
-      </Carousel>
+      <Box width="100%" sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-end'
+      }}>
+        <Image
+          src={ApexHeaderIcon}
+          alt="APEX"
+          width="60px"
+          height="52px"
+        />
+        <TYPE.largeHeader
+          ml={10}
+          textAlign="center"
+          style={{
+            background: 'linear-gradient(90deg, #0CA99A 0.146484375%, #F7DF78 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent'
+          }}>
+          创世挖矿倒计时
+          </TYPE.largeHeader>
+      </Box>
+      <Box width="100%" paddingTop="6px" style={{ textAlign: 'center' }}>
+        <Box style={{
+          display: 'inline-block',
+          padding: '6px 16px',
+          borderRadius: '24px',
+          backgroundColor: '#F1F8F2',
+          boxShadow: '2px 6px 6px 1px #dff0e9'
+        }}>
+          <TYPE.largeHeader
+            fontSize={24}
+            color="primary1"
+            style={{
+              textShadow: '0px 4px 5px rgba(0, 127, 115, 0.43)'
+            }}
+          >
+            88 : 06 : 06 : 06
+        </TYPE.largeHeader>
+        </Box>
+      </Box>
+      <Box width="100%" paddingTop="17px">
+        <Carousel nextIcon={null} prevIcon={null} style={{ width: '100%' }}>
+          <Carousel.Item>
+            <Image
+              src={ApexBanner0}
+              alt="APEX"
+              sx={{ width: ['100%', 'auto'], borderRadius: '12px' }} />
+          </Carousel.Item>
+          <Carousel.Item>
+            <Image
+              src={ApexBanner1}
+              alt="APEX"
+              sx={{ width: ['100%', 'auto'], borderRadius: '12px' }} />
+          </Carousel.Item>
+          <Carousel.Item>
+            <Image
+              src={ApexBanner2}
+              alt="APEX"
+              sx={{ width: ['100%', 'auto'], borderRadius: '12px' }} />
+          </Carousel.Item>
+        </Carousel>
+      </Box>
       <Box width="100%" pt={24}>
         <Invitation />
       </Box>

@@ -67,7 +67,7 @@ export function CurrencyInputGroup({
     }}>
       <Box padding="0.5rem 0 0.5rem 0.5rem">
         <NumericalInput
-          fontSize="18px"
+          fontSize="14px"
           style={{ width: '100%' }}
           value={v}
           placeholder={placeholder}

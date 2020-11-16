@@ -3,6 +3,7 @@ import { Box, Image } from 'rebass'
 import { ButtonPrimary } from '../../components/Button'
 import { TYPE } from '../../theme'
 import { useActiveWeb3React } from '../../hooks'
+import { Link } from 'react-router-dom'
 
 import ApexLogo from '../../assets/images/apex/icon_logo.png'
 
@@ -20,7 +21,9 @@ export default function Header() {
         alignItems: 'center'
       }}>
       <Box>
-        <Image src={ApexLogo} alt="apex logo" width="75px" height="25px" />
+        <Link to="/">
+          <Image src={ApexLogo} alt="apex logo" width="75px" height="25px" />
+        </Link>
       </Box>
       <Box sx={{
         display: 'grid',

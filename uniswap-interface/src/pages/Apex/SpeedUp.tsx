@@ -38,7 +38,7 @@ export default function SpeedUp() {
           <Box 
             sx={{
               display: 'grid',
-              columnGap: '2px',
+              columnGap: '4px',
               gridTemplateColumns: 'repeat(5, 22px)',
               alignItems: 'center',
               flexWrap: 'nowrap'

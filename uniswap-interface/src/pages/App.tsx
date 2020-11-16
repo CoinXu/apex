@@ -26,7 +26,7 @@ import DarkModeQueryParamReader from '../theme/DarkModeQueryParamReader'
 // import PoolFinder from './PoolFinder'
 // import RemoveLiquidity from './RemoveLiquidity'
 // import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects'
-// import Swap from './Swap'
+import Swap from './Swap'
 import Apex, { RedirectToApex } from './Apex'
 import Header from './Apex/Header'
 // import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
@@ -82,9 +82,9 @@ export default function App() {
       <Route component={GoogleAnalyticsReporter} />
       <Route component={DarkModeQueryParamReader} />
       <AppWrapper style={{ background: 'linear-gradient(-180deg, #F1F8F2, #FFFFFF)' }}>
-        <Header />
         {/* <URLWarning /> */}
         <HeaderWrapper>
+          <Header />
           {/* <Header /> */}
         </HeaderWrapper>
         <BodyWrapper>
@@ -94,9 +94,8 @@ export default function App() {
           <Web3ReactManager>
             <Switch>
               <Route exact strict path="/" component={Apex} />
-              <Route exact strict path="/:shareCode" component={RedirectToApex} />
-              {/* <Route exact strict path="/swap" component={Swap} />
-              <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
+              <Route exact strict path="/swap" component={Swap} />
+              {/* <Route exact strict path="/claim" component={OpenClaimAddressModalAndRedirectToSwap} />
               <Route exact strict path="/swap/:outputCurrency" component={RedirectToSwap} />
               <Route exact strict path="/send" component={RedirectPathToSwapOnly} />
               <Route exact strict path="/find" component={PoolFinder} />
@@ -118,6 +117,7 @@ export default function App() {
               <Route exact strict path="/uni/:currencyIdA/:currencyIdB" component={Manage} />
               <Route exact strict path="/vote/:id" component={VotePage} />
               <Route component={RedirectPathToSwapOnly} /> */}
+              <Route exact strict path="/:shareCode" component={RedirectToApex} />
             </Switch>
           </Web3ReactManager>
           <Marginer />

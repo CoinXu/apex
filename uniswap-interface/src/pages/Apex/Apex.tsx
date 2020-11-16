@@ -1,14 +1,103 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import Card from '../../components/Card'
-import Copy from '../../components/AccountDetails/Copy'
+// import Copy from '../../components/AccountDetails/Copy'
 import { IconWrapper } from '../../theme/components'
 import { TYPE } from '../../theme'
 import { Box } from 'rebass'
-import { APEX_MAIN_ADRESS } from '../../constants'
+// import { APEX_MAIN_ADRESS } from '../../constants'
 import { useApexState } from '../../state/apex/hooks'
+import F2 from '@antv/f2'
 
 import ApexCoin from '../../assets/images/apex/apex_coin.png'
 import ETHCoin from '../../assets/images/apex/eth_coin.png'
+
+const MockData = [{
+  time: '2020-02',
+  tem: 26
+}, {
+  time: '2020-03',
+  tem: 18
+}, {
+  time: '2020-04',
+  tem: 26
+}, {
+  time: '2020-05',
+  tem: 12
+}, {
+  time: '2020-06',
+  tem: 10
+}, {
+  time: '2020-07',
+  tem: 22
+}, {
+  time: '2020-08',
+  tem: 16
+}, {
+  time: '2020-09',
+  tem: 26
+}, {
+  time: '2020-10',
+  tem: 12
+}];
+
+function renderChart(container: HTMLCanvasElement): void {
+  const chart = new F2.Chart({
+    el: container,
+    pixelRatio: window.devicePixelRatio
+  })
+
+  chart.source(MockData, {
+    time: {
+      type: 'timeCat',
+      tickCount: 3,
+      range: [0, 1]
+    },
+    tem: {
+      tickCount: 5,
+      min: 0
+    }
+  });
+
+  chart.axis('time', {
+    label: function label(text, index, total) {
+      const textCfg = { textAlign: '' };
+      if (index === 0) {
+        textCfg.textAlign = 'left';
+      } else if (index === total - 1) {
+        textCfg.textAlign = 'right';
+      }
+      return textCfg;
+    }
+  })
+  chart.tooltip({
+    showCrosshairs: true
+  })
+
+  chart.area()
+    .position('time*tem')
+    .color('l(90) 0:#248E84 1:#f7f7f7')
+    .shape('smooth')
+
+  chart.line()
+    .position('time*tem')
+    .color('l(90) 0:#248E84 1:#f7f7f7')
+    .shape('smooth')
+  chart.render()
+}
+
+function Chart() {
+  const canvas = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    if (canvas.current) {
+      renderChart(canvas.current)
+    } 
+  }, [canvas.current])
+
+  return (
+    <canvas ref={canvas} id="cid" width="325" height="156" />
+  )
+}
 
 export default function Apex() {
   const state = useApexState()
@@ -21,11 +110,11 @@ export default function Apex() {
         sx={{
           display: 'grid',
           gridTemplateColumns: '80px auto',
-          gridTemplateRows: 'repeat(6, 24px)',
+          gridTemplateRows: 'repeat(5, 24px)',
           columnGap: '6px',
           rowGap: '6px'
         }}>
-        <Box>
+        {/* <Box>
           <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             合约地址：
           </TYPE.darkGray>
@@ -35,60 +124,84 @@ export default function Apex() {
           justifyContent: 'space-between',
           gridTemplateColumns: 'auto auto'
         }}>
-          <TYPE.gray>{APEX_MAIN_ADRESS.replace(/^(\w{6})(\w+?)(\w{6})$/, (a, b, c, d) => b + '...' + d)}</TYPE.gray>
+          <TYPE.darkGray fontWeight={0} fontSize={14} style={{ color: '#333' }}>
+            {APEX_MAIN_ADRESS.replace(/^(\w{6})(\w+?)(\w{6})$/, (a, b, c, d) => b + '...' + d)}
+          </TYPE.darkGray>
           <Copy toCopy={APEX_MAIN_ADRESS}>
-            <TYPE.blue fontWeight={0} fontSize={14}>
+            <TYPE.blue fontWeight={0} fontSize={14} style={{ color: '#333'}}>
               复制
             </TYPE.blue>
           </Copy>
-        </Box>
+        </Box> */}
         <Box>
           <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             发行总量：
           </TYPE.darkGray>
         </Box>
-        <Box>-</Box>
         <Box>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
+            -
+          </TYPE.darkGray>
+        </Box>
+        {/* <Box>
           <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             持币总量：
           </TYPE.darkGray>
         </Box>
-        <Box>-</Box>
+        <Box>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
+            -
+          </TYPE.darkGray>
+        </Box> */}
         <Box>
           <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             持币地址：
           </TYPE.darkGray>
         </Box>
-        <Box>-</Box>
+        <Box>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
+            -
+          </TYPE.darkGray>
+        </Box>
         <Box>
           <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             转帐次数：
           </TYPE.darkGray>
         </Box>
-        <Box>-</Box>
+        <Box>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
+            -
+          </TYPE.darkGray>
+        </Box>
         <Box>
           <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             上线价格：
           </TYPE.darkGray>
         </Box>
-        <Box>-</Box>
+        <Box>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
+            -
+          </TYPE.darkGray>
+        </Box>
         <Box>
           <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             上线时间：
           </TYPE.darkGray>
         </Box>
-        <Box>-</Box>
+        <Box>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
+            -
+          </TYPE.darkGray>
+        </Box>
       </Box>
       <Box pt={20}>
         <TYPE.subHeader>流动资金池</TYPE.subHeader>
-        <Box pt={12} sx={{
+        <Box pt="6px" sx={{
           display: 'flex',
           justifyContent: 'space-between'
         }}>
-          {/* <TYPE.main>$8888</TYPE.main>
-          <TYPE.main>+3.7%</TYPE.main> */}
-          <TYPE.main>-</TYPE.main>
-          <TYPE.main>-</TYPE.main>
+          <TYPE.main fontSize={18} color="primary1">$ 8888</TYPE.main>
+          <TYPE.main fontSize={14} style={{ color: '#2FD268' }} fontWeight={0}>+3.7%</TYPE.main>
         </Box>
         <Box pt={10} sx={{
           display: 'grid',
@@ -97,16 +210,16 @@ export default function Apex() {
         }}>
           <IconWrapper size={22}><img src={ApexCoin} alt="apex coin" /></IconWrapper>
           <TYPE.main>{state.isFirstApexManning ? state.apexCount : '-'}</TYPE.main>
-          <TYPE.black>枚 APEX</TYPE.black>
+          <TYPE.darkGray fontSize={14} fontWeight={0}>枚 APEX</TYPE.darkGray>
         </Box>
-        <Box pt={10} sx={{
+        <Box sx={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, max-content)',
           columnGap: '16px'
         }}>
           <IconWrapper size={22}><img src={ETHCoin} alt="eth coin" /></IconWrapper>
           <TYPE.main>{state.isFirstApexManning ? state.ethBalance : '-'}</TYPE.main>
-          <TYPE.black>枚 ETH</TYPE.black>
+          <TYPE.darkGray fontSize={14} fontWeight={0}>枚 ETH</TYPE.darkGray>
         </Box>
       </Box>
       <Box pt={20}>
@@ -115,21 +228,18 @@ export default function Apex() {
           display: 'flex',
           justifyContent: 'space-between'
         }}>
-          {/* <TYPE.main>1:0.36</TYPE.main>
-          <TYPE.main>+3.7%</TYPE.main> */}
-          <TYPE.main>-</TYPE.main>
-          <TYPE.main>-</TYPE.main>
+          <TYPE.main fontSize={18} color="primary1">1:0.36</TYPE.main>
+          <TYPE.main fontSize={14} style={{ color: '#2FD268' }} fontWeight={0}>+3.7%</TYPE.main>
         </Box>
         <Box>
-          <TYPE.black>
-            -
-            {/* ≈ $888 */}
-          </TYPE.black>
+          <TYPE.darkGray fontSize={14} fontWeight={0}>
+            ≈ $96.1486
+          </TYPE.darkGray>
         </Box>
       </Box>
       <Box pt={20}>
-        <TYPE.subHeader>价格走势</TYPE.subHeader>
-        <div>-</div>
+        <TYPE.subHeader style={{ color: '#666' }}>价格走势</TYPE.subHeader>
+        <Chart />
       </Box>
     </Card>
   )
