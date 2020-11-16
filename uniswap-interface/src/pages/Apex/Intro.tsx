@@ -5,13 +5,13 @@ import { TYPE } from '../../theme'
 
 import IconCup from '../../assets/images/apex/icon_cup.png'
 import IconHammer from '../../assets/images/apex/icon_hammer.png'
-import IconBeosin from '../../assets/images/apex/icon_beosin.png'
+import IconBeosin from '../../assets/images/apex/icon_beosin_1.png'
 import IconLogo from '../../assets/images/apex/icon_logo.png'
-import Icon1 from '../../assets/images/apex/icon_1.png'
-import Icon2 from '../../assets/images/apex/icon_2.png'
-import Icon3 from '../../assets/images/apex/icon_3.png'
-import Icon4 from '../../assets/images/apex/icon_4.png'
-import Icon5 from '../../assets/images/apex/icon_5.png'
+import Icon1 from '../../assets/images/apex/icon_1_1.png'
+import Icon2 from '../../assets/images/apex/icon_1_2.png'
+import Icon3 from '../../assets/images/apex/icon_1_3.png'
+import Icon4 from '../../assets/images/apex/icon_1_4.png'
+import Icon5 from '../../assets/images/apex/icon_1_5.png'
 
 export default function Intro() {
   return (
@@ -26,14 +26,14 @@ export default function Intro() {
         <Box
           style={{
             backgroundImage: 'linear-gradient(to right, #7ac987, #028073)',
-            padding: '0.5rem'
+            padding: '0.5rem 1.25rem'
           }}
           sx={{
             display: 'flex',
             justifyContent: 'space-between'
           }}>
           <TYPE.mediumHeader color="#fff">流动性挖矿</TYPE.mediumHeader>
-          <Image src={IconCup} size={32} />
+          <Image src={IconHammer} size={32} />
         </Box>
         <Box pt={20} backgroundColor="#8fca97" padding="1rem">
           <TYPE.body color="white">
@@ -41,7 +41,6 @@ export default function Intro() {
           </TYPE.body>
         </Box>
       </Card>
-
       <Card
         mt={20}
         padding="0"
@@ -51,14 +50,14 @@ export default function Intro() {
         <Box
           style={{
             backgroundImage: 'linear-gradient(to right, #7ac987, #028073)',
-            padding: '0.5rem'
+            padding: '0.5rem 1.25rem'
           }}
           sx={{
             display: 'flex',
             justifyContent: 'space-between'
           }}>
           <TYPE.mediumHeader color="#fff">Top10</TYPE.mediumHeader>
-          <Image src={IconHammer} size={32} />
+          <Image src={IconCup} size={32} />
         </Box>
         <Box pt={20} backgroundColor="#8fca97" padding="1rem">
           <TYPE.body color="white">
@@ -70,19 +69,19 @@ export default function Intro() {
       <Box pt={30} style={{ textAlign: 'center' }}>
         <TYPE.mediumHeader color="primary1">合约审计机构</TYPE.mediumHeader>
         <Box>
-          <Image mt={16} src={IconBeosin} alt="icon beosin" />
+          <Image mt={16} src={IconBeosin} width="102px" height="49px" alt="icon beosin" />
         </Box>
         <Box>
-          <Image mt={48} src={IconLogo} alt="apex logo" />
+          <Image mt={10} src={IconLogo} width="84px" height="28px" alt="apex logo" />
         </Box>
-        <Box>
+        <Box mt="8px">
           <Link href="mailto:support@apexswap.org">
-            <TYPE.black>support@apexswap.org</TYPE.black>
+            <TYPE.black fontSize={14} fontWeight={0} style={{ color: '#333' }}>support@apexswap.org</TYPE.black>
           </Link>
         </Box>
       </Box>
 
-      <Box width="100%" mt={24} sx={{
+      <Box width="100%" mt={12} sx={{
         display: 'grid',
         gridTemplateColumns: 'repeat(5, max-content)',
         columnGap: '6px',
@@ -90,20 +89,20 @@ export default function Intro() {
         alignItems: 'center',
         justifyItems: 'center'
       }}>
-        <Link href="#">
-          <Image style={{ boxShadow: '' }} size={24} src={Icon1} alt="icon" />
+        <Link href="https://t.me/apexswap">
+          <Image size={45} src={Icon1} alt="icon" />
         </Link>
-        <Link href="#">
-          <Image size={24} src={Icon2} variant="avatar" alt="icon" />
+        <Link href="https://twitter.com/apexswap">
+          <Image size={45} src={Icon2} variant="avatar" alt="icon" />
         </Link>
-        <Link href="#">
-          <Image size={24} src={Icon3} variant="avatar" alt="icon" />
+        <Link href="https://discord.gg/xr7rPt6Es5">
+          <Image size={45} src={Icon3} variant="avatar" alt="icon" />
         </Link>
-        <Link href="#">
-          <Image size={24} src={Icon4} variant="avatar" alt="icon" />
+        <Link href="https://medium.com/@apexswap">
+          <Image size={45} src={Icon4} variant="avatar" alt="icon" />
         </Link>
-        <Link href="#">
-          <Image size={24} src={Icon5} variant="avatar" alt="icon" />
+        <Link href="mailto:support@apexswap.org">
+          <Image size={45} src={Icon5} variant="avatar" alt="icon" />
         </Link>
       </Box>
     </>

@@ -28,6 +28,7 @@ import DarkModeQueryParamReader from '../theme/DarkModeQueryParamReader'
 // import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects'
 // import Swap from './Swap'
 import Apex, { RedirectToApex } from './Apex'
+import Header from './Apex/Header'
 // import { OpenClaimAddressModalAndRedirectToSwap, RedirectPathToSwapOnly, RedirectToSwap } from './Swap/redirects'
 
 // import Vote from './Vote'
@@ -80,7 +81,8 @@ export default function App() {
     <Suspense fallback={null}>
       <Route component={GoogleAnalyticsReporter} />
       <Route component={DarkModeQueryParamReader} />
-      <AppWrapper>
+      <AppWrapper style={{ background: 'linear-gradient(-180deg, #F1F8F2, #FFFFFF)' }}>
+        <Header />
         {/* <URLWarning /> */}
         <HeaderWrapper>
           {/* <Header /> */}

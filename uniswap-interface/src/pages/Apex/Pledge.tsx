@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks'
 import { stake } from '../../hooks/apex'
 import { useApexState } from '../../state/apex/hooks'
+import { TYPE } from '../../theme'
 // import { APEX_MAIN_ADRESS } from '../../constants'
 
 export const StyledBalanceMax = styled.button<{ 
@@ -85,8 +86,12 @@ export function CurrencyInputGroup({
           padding="2px 4px" 
           width="100%"
           height="100%"
+          style={{ background: '#DFF0E9', border: '1px solid #52C18B' }}
+          fontSize={14}
           borderRadius="10px">
-          {buttonText}
+          <TYPE.main color="primary1" fontSize={14}>
+            {buttonText}
+          </TYPE.main >
         </ButtonPrimary>
       </Box>
       </Box>
@@ -98,7 +103,7 @@ export default function Pledge() {
   const { account } = useActiveWeb3React()
   
   return (
-    <Card border="1px solid #63c695" backgroundColor="#fff" padding="0">
+    <Card border="1px solid #52C18B" backgroundColor="#fff" padding="0">
       <CurrencyInputGroup
         value=""
         helpButtonText="max"

@@ -69,6 +69,7 @@ export default function SpeedUp() {
               padding="2px 4px"
               width="100%"
               height="100%"
+              fontSize={14}
               borderRadius="10px">
               加速
             </ButtonPrimary>

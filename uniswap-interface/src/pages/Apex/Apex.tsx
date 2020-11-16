@@ -26,7 +26,7 @@ export default function Apex() {
           rowGap: '6px'
         }}>
         <Box>
-          <TYPE.darkGray>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             合约地址：
           </TYPE.darkGray>
         </Box>
@@ -37,43 +37,43 @@ export default function Apex() {
         }}>
           <TYPE.gray>{APEX_MAIN_ADRESS.replace(/^(\w{6})(\w+?)(\w{6})$/, (a, b, c, d) => b + '...' + d)}</TYPE.gray>
           <Copy toCopy={APEX_MAIN_ADRESS}>
-            <TYPE.blue>
+            <TYPE.blue fontWeight={0} fontSize={14}>
               复制
             </TYPE.blue>
           </Copy>
         </Box>
         <Box>
-          <TYPE.darkGray>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             发行总量：
           </TYPE.darkGray>
         </Box>
         <Box>-</Box>
         <Box>
-          <TYPE.darkGray>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             持币总量：
           </TYPE.darkGray>
         </Box>
         <Box>-</Box>
         <Box>
-          <TYPE.darkGray>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             持币地址：
           </TYPE.darkGray>
         </Box>
         <Box>-</Box>
         <Box>
-          <TYPE.darkGray>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             转帐次数：
           </TYPE.darkGray>
         </Box>
         <Box>-</Box>
         <Box>
-          <TYPE.darkGray>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             上线价格：
           </TYPE.darkGray>
         </Box>
         <Box>-</Box>
         <Box>
-          <TYPE.darkGray>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             上线时间：
           </TYPE.darkGray>
         </Box>

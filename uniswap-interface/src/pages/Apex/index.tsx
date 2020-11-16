@@ -105,35 +105,44 @@ function Invitation() {
           columnGap: '12px'
         }}>
           <Box>
-            <TYPE.black>推荐链接</TYPE.black>
-            <TYPE.gray style={{ wordBreak: 'break-word' }}>{link}</TYPE.gray>
+            <TYPE.black fontSize="14px">推荐链接</TYPE.black>
+            <TYPE.gray fontWeight={0} fontSize="14px" style={{ wordBreak: 'break-word' }}>
+              {link}
+            </TYPE.gray>
           </Box>
           <Box>
             <Copy toCopy={link}>
-              <TYPE.blue>
+              <TYPE.blue fontSize="10px">
                 邀请好友<br />分享复制
               </TYPE.blue>
             </Copy>
           </Box>
         </Box>
-        <Box mt={24} sx={{
+        <Box mt={24} width="100%" display="flex" sx={{ alignItems: 'center' }}>
+          <TYPE.blue fontSize={18} fontWeight={0} mr={11}>APEX:</TYPE.blue>
+          <TYPE.blue fontSize={22}>8888</TYPE.blue>
+        </Box>
+        <Box sx={{
           display: 'grid',
           gridTemplateColumns: 'auto auto',
           justifyContent: 'space-between',
           alignItems: 'center',
           columnGap: '12px'
         }}>
-          <Box>
-            <TYPE.blue fontSize={18}>APEX: 8888</TYPE.blue>
-            <TYPE.blue fontSize={22}>≈ $888</TYPE.blue>
+          <Box style={{ lineHeight: 1 }} display="flex" sx={{ alignItems: 'center' }}>
+            <TYPE.blue fontSize={14} fontWeight={0} mr={11}>≈</TYPE.blue>
+            <TYPE.blue fontSize={30}>$8888</TYPE.blue>
           </Box>
           <Box>
             <ButtonPrimary
               onClick={() => state.mainContract && account && harvest(state.mainContract, state.isFirstApexManning, account)}
               padding="2px 4px"
               width="60px"
-              borderRadius="4px">
-              提现
+              style={{ backgroundColor: '#DFF0E9' }}
+              borderRadius="15px">
+              <TYPE.main color="primary1" fontSize={18}>
+                提现
+                </TYPE.main>
             </ButtonPrimary>
           </Box>
         </Box>
@@ -159,28 +168,28 @@ function CurrencyPreview() {
       <Card border="1px solid #63c695">
         <Box sx={{
           display: 'grid',
-          gridTemplateColumns: '80px auto',
+          gridTemplateColumns: 'auto auto',
           gridTemplateRows: 'repeat(3, 24px)',
           justifyContent: 'space-between',
           columnGap: '6px',
           rowGap: '6px'
         }}>
           <Box>
-            <TYPE.blue>锁仓总量：</TYPE.blue>
+            <TYPE.blue fontWeight={0}>锁仓总量：</TYPE.blue>
           </Box>
           <Box>
-            <TYPE.blue>- USD</TYPE.blue>
+            <TYPE.blue textAlign="right">- USD</TYPE.blue>
           </Box>
           <Box>
-            <TYPE.blue>预计年化：</TYPE.blue>
+            <TYPE.blue fontWeight={0}>预计年化：</TYPE.blue>
           </Box>
           <Box>
-            <TYPE.blue>-</TYPE.blue>
+            <TYPE.blue textAlign="right">-%</TYPE.blue>
           </Box>
           <Box>
-            <TYPE.blue>奖金池：</TYPE.blue>
+            <TYPE.blue fontWeight={0}>奖金池：</TYPE.blue>
           </Box>
-          <Box sx={{
+          <Box style={{ textAlign: 'right' }} sx={{
             display: 'flex'
           }}>
             <ButtonPrimary
@@ -224,7 +233,7 @@ export function RedirectToApex(props: RouteComponentProps<{ shareCode: string }>
 export default function () {
   return (
     <>
-      <Carousel nextIcon={null} prevIcon={null}>
+      <Carousel nextIcon={null} prevIcon={null} style={{ width: '100%' }}>
         <Carousel.Item>
           <Image
             src={ApexBanner0}

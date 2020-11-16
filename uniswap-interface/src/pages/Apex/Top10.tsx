@@ -32,8 +32,23 @@ export default function Top10() {
 
   return (
     <Card border="1px solid #63c695">
-      <TYPE.largeHeader textAlign="center">Top10 竞赛排名</TYPE.largeHeader>
-      <TYPE.mediumHeader textAlign="center">倒计时</TYPE.mediumHeader>
+      <TYPE.largeHeader 
+        fontSize={20}
+        textAlign="center" 
+        style={{
+          background: 'linear-gradient(100deg, #0CA99A 0.146484375%, #F7DF78 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent'
+        }}>
+        Top10 竞赛排名
+      </TYPE.largeHeader>
+      <TYPE.mediumHeader 
+        style={{
+          background: 'linear-gradient(100deg, #0CA99A 0.146484375%, #F7DF78 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent'
+        }}
+        textAlign="center">倒计时</TYPE.mediumHeader>
       <Counter pt={16} textAlign="center">--:--:--:--</Counter>
       <Box pt={16} sx={{
         display: 'grid',
@@ -51,8 +66,8 @@ export default function Top10() {
           justifyItems: 'center'
         }}>
           <Image mb={10} src={Top2} variant="ravatar" alt="top 2" />
-          <TYPE.black>-- APEX</TYPE.black>
-          <TYPE.blue>-- ETH</TYPE.blue>
+          <TYPE.black fontSize={14}>-- APEX</TYPE.black>
+          <TYPE.blue fontSize={20}>-- ETH</TYPE.blue>
         </Box>
         <Box sx={{
           display: 'grid',
@@ -62,8 +77,8 @@ export default function Top10() {
           justifyItems: 'center'
         }}>
           <Image mb={10} src={Top1} variant="ravatar" alt="top 1" />
-          <TYPE.black>-- APEX</TYPE.black>
-          <TYPE.blue>-- ETH</TYPE.blue>
+          <TYPE.black fontSize={14}>-- APEX</TYPE.black>
+          <TYPE.blue fontSize={20}>-- ETH</TYPE.blue>
         </Box>
         <Box sx={{
           display: 'grid',
@@ -73,8 +88,8 @@ export default function Top10() {
           justifyItems: 'center'
         }}>
           <Image mb={10} src={Top3} variant="ravatar" alt="top 3" />
-          <TYPE.black>-- APEX</TYPE.black>
-          <TYPE.blue>-- ETH</TYPE.blue>
+          <TYPE.black fontSize={14}>-- APEX</TYPE.black>
+          <TYPE.blue fontSize={20}>-- ETH</TYPE.blue>
         </Box>
       </Box>
       <Box pt={16} sx={{
@@ -86,9 +101,9 @@ export default function Top10() {
         alignItems: 'flex-end',
         justifyItems: 'center'
       }}>
-        <TYPE.darkGray>Top4</TYPE.darkGray>
-        <TYPE.darkGray>-- APEX</TYPE.darkGray>
-        <TYPE.darkGray>-- ETH</TYPE.darkGray>
+        <TYPE.darkGray fontSize={14}>Top4</TYPE.darkGray>
+        <TYPE.darkGray fontSize={14}>-- APEX</TYPE.darkGray>
+        <TYPE.darkGray fontSize={14}>-- ETH</TYPE.darkGray>
 
         {/* <TYPE.black>Top4</TYPE.black>
         <TYPE.black>888...APEX</TYPE.black>
