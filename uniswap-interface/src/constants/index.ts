@@ -11,6 +11,8 @@ export const APEX_TOKEN_ADRESS = '0x3Bdea1232b091e059C1429c9f6eB25DA929DE91C'
 
 export const APEX_MAIN_ADRESS = '0x3Bdea1232b091e059C1429c9f6eB25DA929DE91C'
 
+export const APEX_DEFAULT_REFERRER_ADDRESS = '0xb4C58689972a899de6e9A7d9A1d2CEC8Ac2A49eb'
+
 // a list of tokens by chain
 type ChainTokenList = {
   readonly [chainId in ChainId]: Token[]

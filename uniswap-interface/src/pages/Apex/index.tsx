@@ -11,12 +11,13 @@ import UnlockPledge from './UnlockPledge'
 import Apex from './Apex'
 import Top10 from './Top10'
 import Intro from './Intro'
-import { harvest } from '../../hooks/apex'
+import { harvest, claimLP } from '../../hooks/apex'
 import { useActiveWeb3React } from '../../hooks'
-import { 
+import {
   useGetShareCodeCallback, useConsumeShareCodeCallback, useApexState,
   useCreateApexMainContractCallback, useCreateApexTokenContractCallback,
-  useApexGetEarned
+  useApexGetEarned, useGetApexCountCallback, useGetETHBalanceCallback, useGetETHPriceCallback,
+  useGetLPGenerationCompletedCallback
 } from '../../state/apex/hooks'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
 // import { APEX_MAIN_ADRESS } from '../../constants'
@@ -25,29 +26,49 @@ import useParsedQueryString from '../../hooks/useParsedQueryString'
 // import { getEarned as _getEarned } from '../../hooks/apex'
 
 import ApexBanner0 from '../../assets/images/apex/apex_banner_0.png'
+import ApexBanner1 from '../../assets/images/apex/apex_banner_1.png'
+import ApexBanner2 from '../../assets/images/apex/apex_banner_2.png'
+
+import { Carousel } from 'react-bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 function Invitation() {
   const state = useApexState()
-  const link: string = `${window.location.origin}/#/${state.shareCode || ""}`
   const { account, library } = useActiveWeb3React()
+  const link: string = `${window.location.origin}/#/${state.shareCode || ''}`
   const qs = useParsedQueryString()
   const getShareCode = useGetShareCodeCallback()
   const createApexMainContract = useCreateApexMainContractCallback(library)
   const createApexTokenContract = useCreateApexTokenContractCallback(library)
   const consumeShareCode = useConsumeShareCodeCallback()
   const getEarned = useApexGetEarned()
+  const getApexCount = useGetApexCountCallback()
+  const getETHBalance = useGetETHBalanceCallback()
+  const getETHPrice = useGetETHPriceCallback()
 
   useEffect(() => {
-      if (!state.mainContract) {
-        createApexMainContract()
-      }
-  }, [createApexMainContract, account, state.mainContract, window.web3])
+    if (account) getApexCount(account)
+  }, [account])
+
+  useEffect(() => {
+    if (account) getETHBalance()
+  }, [account])
+
+  useEffect(() => {
+    if (account) getETHPrice()
+  }, [account])
+
+  useEffect(() => {
+    if (!state.mainContract) {
+      createApexMainContract()
+    }
+  }, [account, state.mainContract, window.web3])
 
   useEffect(() => {
     if (!state.tokenContract) {
       createApexTokenContract()
     }
-  }, [createApexTokenContract, account, state.tokenContract, window.web3])
+  }, [account, state.tokenContract, window.web3])
 
   useEffect(() => {
     if (state.mainContract && account) {
@@ -59,23 +80,23 @@ function Invitation() {
       // deposit(contract, account, APEX_MAIN_ADRESS)
       getEarned(state.mainContract, account)
     }
-  }, [getEarned, state.mainContract, account])
+  }, [state.mainContract, account])
 
   useEffect(() => {
     if (account) {
       getShareCode(account)
     }
-  }, [getShareCode, account, state.consumed])
+  }, [account, state.consumed])
 
   useEffect(() => {
     if (qs.shareCode) {
       consumeShareCode(qs.shareCode as string)
     }
-  }, [consumeShareCode, qs.shareCode])
+  }, [qs.shareCode])
 
   return (
     <>
-      <Card border="1px solid green">
+      <Card border="1px solid #63c695">
         <Box sx={{
           display: 'grid',
           gridTemplateColumns: 'auto auto',
@@ -85,15 +106,17 @@ function Invitation() {
         }}>
           <Box>
             <TYPE.black>推荐链接</TYPE.black>
-            <TYPE.link style={{ wordBreak: 'break-word' }}>{link}</TYPE.link>
+            <TYPE.gray style={{ wordBreak: 'break-word' }}>{link}</TYPE.gray>
           </Box>
           <Box>
             <Copy toCopy={link}>
-              邀请好友<br />分享复制
+              <TYPE.blue>
+                邀请好友<br />分享复制
+              </TYPE.blue>
             </Copy>
           </Box>
         </Box>
-        <Box mt={36} sx={{
+        <Box mt={24} sx={{
           display: 'grid',
           gridTemplateColumns: 'auto auto',
           justifyContent: 'space-between',
@@ -101,14 +124,14 @@ function Invitation() {
           columnGap: '12px'
         }}>
           <Box>
-            <TYPE.subHeader>APEX: 8888</TYPE.subHeader>
-            <TYPE.subHeader>≈$888</TYPE.subHeader>
+            <TYPE.blue fontSize={18}>APEX: 8888</TYPE.blue>
+            <TYPE.blue fontSize={22}>≈ $888</TYPE.blue>
           </Box>
           <Box>
             <ButtonPrimary
-              onClick={() => state.mainContract && account && harvest(state.mainContract, account)}
+              onClick={() => state.mainContract && account && harvest(state.mainContract, state.isFirstApexManning, account)}
               padding="2px 4px"
-              width="80px"
+              width="60px"
               borderRadius="4px">
               提现
             </ButtonPrimary>
@@ -120,9 +143,20 @@ function Invitation() {
 }
 
 function CurrencyPreview() {
+  const { account } = useActiveWeb3React()
+  const state = useApexState()
+  const getIsFirstApexManning = useGetLPGenerationCompletedCallback()
+
+  useEffect(() => {
+    getIsFirstApexManning()
+  }, [getIsFirstApexManning, state.isFirstApexManning])
+
+  const bonus: number = state.isFirstApexManning
+    ? state.ethBalance * state.ethPrice * 0.07
+    : state.ethBalance * state.ethPrice
   return (
     <>
-      <Card border="1px solid green">
+      <Card border="1px solid #63c695">
         <Box sx={{
           display: 'grid',
           gridTemplateColumns: '80px auto',
@@ -132,22 +166,32 @@ function CurrencyPreview() {
           rowGap: '6px'
         }}>
           <Box>
-            <TYPE.subHeader>锁仓总量：</TYPE.subHeader>
+            <TYPE.blue>锁仓总量：</TYPE.blue>
           </Box>
           <Box>
-            <TYPE.subHeader>8888 USD</TYPE.subHeader>
+            <TYPE.blue>- USD</TYPE.blue>
           </Box>
           <Box>
-            <TYPE.subHeader>预计年化：</TYPE.subHeader>
+            <TYPE.blue>预计年化：</TYPE.blue>
           </Box>
           <Box>
-            <TYPE.subHeader>300%</TYPE.subHeader>
+            <TYPE.blue>-</TYPE.blue>
           </Box>
           <Box>
-            <TYPE.subHeader>奖金池：</TYPE.subHeader>
+            <TYPE.blue>奖金池：</TYPE.blue>
           </Box>
-          <Box>
-            <TYPE.subHeader>8888 USD</TYPE.subHeader>
+          <Box sx={{
+            display: 'flex'
+          }}>
+            <ButtonPrimary
+              onClick={() => state.mainContract && account && claimLP(state.mainContract, account)}
+              padding="2px 4px"
+              width="60px"
+              mr="10px"
+              borderRadius="4px">
+              提奖
+            </ButtonPrimary>
+            <TYPE.blue>{bonus} USD</TYPE.blue>
           </Box>
         </Box>
       </Card>
@@ -180,10 +224,26 @@ export function RedirectToApex(props: RouteComponentProps<{ shareCode: string }>
 export default function () {
   return (
     <>
-      <Image
-        src={ApexBanner0}
-        alt="APEX"
-        sx={{ width: ['100%', 'auto'] }} />
+      <Carousel nextIcon={null} prevIcon={null}>
+        <Carousel.Item>
+          <Image
+            src={ApexBanner0}
+            alt="APEX"
+            sx={{ width: ['100%', 'auto'], borderRadius: '12px' }} />
+        </Carousel.Item>
+        <Carousel.Item>
+          <Image
+            src={ApexBanner1}
+            alt="APEX"
+            sx={{ width: ['100%', 'auto'], borderRadius: '12px' }} />
+        </Carousel.Item>
+        <Carousel.Item>
+          <Image
+            src={ApexBanner2}
+            alt="APEX"
+            sx={{ width: ['100%', 'auto'], borderRadius: '12px' }} />
+        </Carousel.Item>
+      </Carousel>
       <Box width="100%" pt={24}>
         <Invitation />
       </Box>

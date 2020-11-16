@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Card from '../../components/Card'
 import { Box, Image } from 'rebass'
 import { TYPE } from '../../theme'
 import styled from 'styled-components'
+import { useActiveWeb3React } from '../../hooks'
+import { useGetApexTop10Callback, useGetUserReferralsCallback } from '../../state/apex/hooks'
 
 import Top1 from '../../assets/images/apex/top1.png'
 import Top2 from '../../assets/images/apex/top2.png'
@@ -16,11 +18,23 @@ const Counter = styled(TYPE.largeHeader)`
 `
 
 export default function Top10() {
+  const { account } = useActiveWeb3React()
+  const getTop10 = useGetApexTop10Callback()
+  const getUserReferrals = useGetUserReferralsCallback()
+
+  useEffect(() => {
+    getTop10()
+  }, [account])
+
+  useEffect(() => {
+    if(account) getUserReferrals(account)
+  }, [account])
+
   return (
-    <Card border="1px solid green">
+    <Card border="1px solid #63c695">
       <TYPE.largeHeader textAlign="center">Top10 竞赛排名</TYPE.largeHeader>
       <TYPE.mediumHeader textAlign="center">倒计时</TYPE.mediumHeader>
-      <Counter pt={16} textAlign="center">88:06:06:06</Counter>
+      <Counter pt={16} textAlign="center">--:--:--:--</Counter>
       <Box pt={16} sx={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
@@ -36,9 +50,9 @@ export default function Top10() {
           alignItems: 'flex-end',
           justifyItems: 'center'
         }}>
-          <Image mb={10} size={48} src={Top2} alt="top 2" />
-          <TYPE.main>888...APEX</TYPE.main>
-          <TYPE.black>888...ETH</TYPE.black>
+          <Image mb={10} src={Top2} variant="ravatar" alt="top 2" />
+          <TYPE.black>-- APEX</TYPE.black>
+          <TYPE.blue>-- ETH</TYPE.blue>
         </Box>
         <Box sx={{
           display: 'grid',
@@ -47,9 +61,9 @@ export default function Top10() {
           alignItems: 'flex-end',
           justifyItems: 'center'
         }}>
-          <Image mb={10} size={72} src={Top1} alt="top 1" />
-          <TYPE.main>888...APEX</TYPE.main>
-          <TYPE.black>888...ETH</TYPE.black>
+          <Image mb={10} src={Top1} variant="ravatar" alt="top 1" />
+          <TYPE.black>-- APEX</TYPE.black>
+          <TYPE.blue>-- ETH</TYPE.blue>
         </Box>
         <Box sx={{
           display: 'grid',
@@ -58,9 +72,9 @@ export default function Top10() {
           alignItems: 'flex-end',
           justifyItems: 'center'
         }}>
-          <Image mb={10} size={48} src={Top3} alt="top 3" />
-          <TYPE.main>888...APEX</TYPE.main>
-          <TYPE.black>888...ETH</TYPE.black>
+          <Image mb={10} src={Top3} variant="ravatar" alt="top 3" />
+          <TYPE.black>-- APEX</TYPE.black>
+          <TYPE.blue>-- ETH</TYPE.blue>
         </Box>
       </Box>
       <Box pt={16} sx={{
@@ -72,17 +86,17 @@ export default function Top10() {
         alignItems: 'flex-end',
         justifyItems: 'center'
       }}>
-        <TYPE.black>Top4</TYPE.black>
+        <TYPE.darkGray>Top4</TYPE.darkGray>
+        <TYPE.darkGray>-- APEX</TYPE.darkGray>
+        <TYPE.darkGray>-- ETH</TYPE.darkGray>
+
+        {/* <TYPE.black>Top4</TYPE.black>
         <TYPE.black>888...APEX</TYPE.black>
         <TYPE.black>888...ETH</TYPE.black>
 
         <TYPE.black>Top4</TYPE.black>
         <TYPE.black>888...APEX</TYPE.black>
-        <TYPE.black>888...ETH</TYPE.black>
-
-        <TYPE.black>Top4</TYPE.black>
-        <TYPE.black>888...APEX</TYPE.black>
-        <TYPE.black>888...ETH</TYPE.black>
+        <TYPE.black>888...ETH</TYPE.black> */}
       </Box>
     </Card>
   )

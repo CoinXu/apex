@@ -10,7 +10,7 @@ export default function Pledge() {
   const { account } = useActiveWeb3React()
 
   return (
-    <Card border="1px solid green">
+    <Card border="1px solid #63c695" backgroundColor="#fff" padding="0">
       <CurrencyInputGroup
         value=""
         helpButtonText="max"

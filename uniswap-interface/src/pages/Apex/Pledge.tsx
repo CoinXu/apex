@@ -9,7 +9,7 @@ import { stake } from '../../hooks/apex'
 import { useApexState } from '../../state/apex/hooks'
 // import { APEX_MAIN_ADRESS } from '../../constants'
 
-const StyledBalanceMax = styled.button<{ 
+export const StyledBalanceMax = styled.button<{ 
   width?: string, 
   height?: string, 
   padding?: string }>`
@@ -60,11 +60,13 @@ export function CurrencyInputGroup({
   return (
     <Box sx={{
       display: 'grid',
-      gridTemplateColumns: 'auto auto 80px',
+      // gridTemplateColumns: 'auto auto 80px',
+      gridTemplateColumns: 'auto 80px',
       columnGap: '6px'
     }}>
-      <Box>
+      <Box padding="0.5rem 0 0.5rem 0.5rem">
         <NumericalInput
+          fontSize="18px"
           style={{ width: '100%' }}
           value={v}
           placeholder={placeholder}
@@ -74,15 +76,16 @@ export function CurrencyInputGroup({
           }}
         />
       </Box>
-      <Box>
+      {/* <Box>
         <StyledBalanceMax width="100%" onClick={() => { }}>{helpButtonText}</StyledBalanceMax>
-      </Box>
-      <Box>
+      </Box> */}
+      <Box height="100%">
         <ButtonPrimary 
           onClick={() => onButtonClick(v)}
           padding="2px 4px" 
           width="100%"
-          borderRadius="4px">
+          height="100%"
+          borderRadius="10px">
           {buttonText}
         </ButtonPrimary>
       </Box>
@@ -95,7 +98,7 @@ export default function Pledge() {
   const { account } = useActiveWeb3React()
   
   return (
-    <Card border="1px solid green">
+    <Card border="1px solid #63c695" backgroundColor="#fff" padding="0">
       <CurrencyInputGroup
         value=""
         helpButtonText="max"

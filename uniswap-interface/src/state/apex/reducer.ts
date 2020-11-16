@@ -1,5 +1,9 @@
 import { createReducer } from '@reduxjs/toolkit'
-import { fetchShareCode, consumeShareCode, createApexMainContract, createApexTokenContract } from './actions'
+import { 
+  fetchShareCode, consumeShareCode, createApexMainContract, 
+  createApexTokenContract, getApexCount, getETHBalance, getETHPrice,
+  getApexTop10, getUserReferrals
+} from './actions'
 import { Contract } from 'web3-eth-contract'
 
 export interface ApexState {
@@ -8,6 +12,12 @@ export interface ApexState {
   readonly consumed: boolean;
   readonly mainContract: Contract | null;
   readonly tokenContract: Contract | null;
+  readonly apexCount: number;
+  readonly ethBalance: number;
+  readonly ethPrice: number;
+  readonly isFirstApexManning: boolean;
+  readonly top10: any[];
+  readonly userReferrals: any[];
 }
 
 const initialState: ApexState = {
@@ -15,7 +25,13 @@ const initialState: ApexState = {
   shareAccount: "",
   consumed: false,
   mainContract: null,
-  tokenContract: null
+  tokenContract: null,
+  apexCount: 0,
+  ethBalance: 0,
+  ethPrice: 0,
+  isFirstApexManning: false,
+  top10: [],
+  userReferrals: []
 }
 
 export default createReducer(initialState, builder => {
@@ -32,5 +48,21 @@ export default createReducer(initialState, builder => {
   })
   .addCase(createApexMainContract, (state, action) => {
     state.mainContract = action.payload.contract
+  })
+  .addCase(getApexCount, (state, action) => {
+    state.apexCount = action.payload.count
+  })
+  .addCase(getETHBalance, (state, action) => {
+    state.ethBalance = action.payload.balance
+    state.isFirstApexManning = state.ethBalance > 1000
+  })
+  .addCase(getETHPrice, (state, action) => {
+    state.ethPrice = action.payload.price
+  })
+  .addCase(getApexTop10, (state, action) => {
+    state.top10 = action.payload.list
+  })
+  .addCase(getUserReferrals, (state, action) => {
+    state.userReferrals = action.payload.list
   })
 })
