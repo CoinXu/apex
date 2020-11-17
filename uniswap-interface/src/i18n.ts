@@ -20,4 +20,5 @@ i18next
     interpolation: { escapeValue: false }
   })
 
+
 export default i18next

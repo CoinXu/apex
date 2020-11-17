@@ -97,7 +97,7 @@ function Invitation() {
 
   return (
     <>
-      <Card border="1px solid #63c695">
+      <Card border="1px solid #63c695" backgroundColor="#fff">
         <Box sx={{
           display: 'grid',
           gridTemplateColumns: 'auto auto',
@@ -107,7 +107,7 @@ function Invitation() {
         }}>
           <Box>
             <TYPE.black fontSize="14px">推荐链接</TYPE.black>
-            <TYPE.gray fontWeight={0} fontSize="14px" style={{ wordBreak: 'break-word' }}>
+            <TYPE.gray fontWeight={0} fontSize="12px" style={{ wordBreak: 'break-word' }}>
               {link}
             </TYPE.gray>
           </Box>
@@ -120,7 +120,7 @@ function Invitation() {
           </Box>
         </Box>
         <Box mt={24} width="100%" display="flex" sx={{ alignItems: 'center' }}>
-          <TYPE.blue fontSize={18} fontWeight={0} mr={11}>APEX:</TYPE.blue>
+          <TYPE.blue fontSize={18} mr={11}>APEX:</TYPE.blue>
           <TYPE.blue fontSize={22}>8888</TYPE.blue>
         </Box>
         <Box sx={{
@@ -166,7 +166,7 @@ function CurrencyPreview() {
     : state.ethBalance * state.ethPrice
   return (
     <>
-      <Card border="1px solid #63c695">
+      <Card border="1px solid #63c695" backgroundColor="#fff">
         <Box sx={{
           display: 'grid',
           gridTemplateColumns: 'auto auto',
@@ -200,8 +200,8 @@ function CurrencyPreview() {
               mr="10px"
               style={{ backgroundColor: '#DFF0E9' }}
               borderRadius="15px">
-              <TYPE.main color="primary1" fontSize={18}>
-                提奖
+              <TYPE.main color="primary1" fontSize={14}>
+                领奖
               </TYPE.main>
             </ButtonPrimary>
             <TYPE.blue>{bonus} USD</TYPE.blue>
@@ -300,7 +300,7 @@ export default function () {
           </Carousel.Item>
         </Carousel>
       </Box>
-      <Box width="100%" pt={24}>
+      <Box width="100%" pt={24} id="manning">
         <Invitation />
       </Box>
       <Box width="100%" pt={24}>
@@ -315,13 +315,15 @@ export default function () {
       <Box width="100%" pt={12}>
         <UnlockPledge />
       </Box>
-      <Box width="100%" pt={24}>
+      <Box width="100%" pt={24} id="apex">
         <Apex />
       </Box>
-      <Box width="100%" pt={24}>
+      <Box width="100%" pt={24} id="top10">
         <Top10 />
       </Box>
-      <Intro />
+      <Box width="100%" id="apex-swap">
+        <Intro />
+      </Box>
     </>
   )
 }

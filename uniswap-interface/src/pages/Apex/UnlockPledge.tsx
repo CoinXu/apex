@@ -13,7 +13,7 @@ export default function Pledge() {
     <Card border="1px solid #52C18B" backgroundColor="#fff" padding="0">
       <CurrencyInputGroup
         value=""
-        helpButtonText="max"
+        helpButtonText="最大值"
         buttonText="解除质押"
         placeholder="请输入金额"
         onButtonClick={(value: string) => {

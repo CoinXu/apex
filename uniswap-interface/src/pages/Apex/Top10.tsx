@@ -31,7 +31,7 @@ export default function Top10() {
   }, [account])
 
   return (
-    <Card border="1px solid #63c695">
+    <Card border="1px solid #63c695" backgroundColor="#fff">
       <TYPE.largeHeader
         fontSize={20}
         textAlign="center"

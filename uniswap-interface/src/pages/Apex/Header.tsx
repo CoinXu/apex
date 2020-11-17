@@ -4,14 +4,55 @@ import { ButtonPrimary } from '../../components/Button'
 import { TYPE } from '../../theme'
 import { useActiveWeb3React } from '../../hooks'
 import { Link } from 'react-router-dom'
+import { Dropdown } from 'react-bootstrap'
+import styled from 'styled-components'
+import i18n from '../../i18n'
 
 import ApexLogo from '../../assets/images/apex/icon_logo.png'
+
+const StyledLine = styled.div<{ width: number }>`
+  margin-bottom: 2px;
+  margin-top: 2px;
+  width: ${({ width }) => `${width}px`};
+  height: 2px;
+  background: #007F73;
+`
+
+const IconThreeLine = React.forwardRef<any, any>(({ children, onClick }, ref) => (
+  <Box ref={ref} onClick={(e) => {
+    e.preventDefault();
+    onClick(e);
+  }}>
+    <StyledLine width={17} />
+    <StyledLine width={10} />
+    <StyledLine width={7} />
+    {children}
+  </Box>
+));
+
+const IconEN = React.forwardRef<any, any>(({ children, onClick }, ref) => (
+  <Box ref={ref} onClick={(e) => {
+    e.preventDefault();
+    onClick(e);
+  }}>
+    <TYPE.main color="primary1" fontSize={14} fontWeight={0}>EN</TYPE.main>
+  </Box>
+));
+
+function scrollIntoView(selector: string) {
+  if (!selector) return
+
+  const element = document.querySelector(selector)
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
 
 export default function Header() {
   const { account } = useActiveWeb3React()
   return (
-    <Box 
-      width="100%" 
+    <Box
+      width="100%"
       padding="10px 18px"
       backgroundColor="#fff"
       sx={{
@@ -28,7 +69,7 @@ export default function Header() {
       <Box sx={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, auto)',
-        columnGap: '6px',
+        columnGap: '12px',
         justifyContent: 'space-between',
         alignItems: 'center'
       }}>
@@ -39,13 +80,47 @@ export default function Header() {
           padding="2px"
           borderRadius="5px">
           <TYPE.subHeader color="primary1">
-            {account 
+            · {account
               ? account.replace(/^(\w{6})(\w+?)(\w{4})$/, (a, b, c, d) => b + '...' + d)
               : '...'
             }
           </TYPE.subHeader>
         </ButtonPrimary>
-        <TYPE.main color="primary1" fontSize={14} fontWeight={0}>EN</TYPE.main>
+        <Box>
+          <Dropdown>
+            <Dropdown.Toggle as={IconThreeLine} variant="link" id="dropdown-basic">
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item href="/">首页</Dropdown.Item>
+              <Dropdown.Item onClick={() => scrollIntoView("#manning")}>
+                挖矿
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <Link to="/swap">兑换</Link>
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => scrollIntoView("#apex")}>
+                流动性
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => scrollIntoView("#top10")}>
+                Top10
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => scrollIntoView("#apex-swap")}>
+                APEX
+              </Dropdown.Item>
+              <Dropdown.Item href="https://t.me/apexswap">Join</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Box>
+        <Box>
+          <Dropdown>
+            <Dropdown.Toggle as={IconEN} variant="link" id="dropdown-en">
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={() => i18n.changeLanguage('en')}>EN</Dropdown.Item>
+              <Dropdown.Item onClick={() => i18n.changeLanguage('zh-CN')}>中文</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Box>
       </Box>
     </Box>
   )

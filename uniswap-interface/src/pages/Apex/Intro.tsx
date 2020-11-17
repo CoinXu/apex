@@ -16,7 +16,9 @@ import Icon5 from '../../assets/images/apex/icon_1_5.png'
 export default function Intro() {
   return (
     <>
-      <TYPE.largeHeader mt={32} color="primary1">APEX Swap</TYPE.largeHeader>
+      <TYPE.largeHeader textAlign="center" mt={32} color="primary1">
+        APEX Swap
+      </TYPE.largeHeader>
       <Card
         mt={20}
         padding="0"
@@ -93,16 +95,16 @@ export default function Intro() {
           <Image size={45} src={Icon1} alt="icon" />
         </Link>
         <Link href="https://twitter.com/apexswap">
-          <Image size={45} src={Icon2} variant="avatar" alt="icon" />
+          <Image size={45} src={Icon5} variant="avatar" alt="icon" />
         </Link>
         <Link href="https://discord.gg/xr7rPt6Es5">
-          <Image size={45} src={Icon3} variant="avatar" alt="icon" />
-        </Link>
-        <Link href="https://medium.com/@apexswap">
           <Image size={45} src={Icon4} variant="avatar" alt="icon" />
         </Link>
+        <Link href="https://medium.com/@apexswap">
+          <Image size={45} src={Icon3} variant="avatar" alt="icon" />
+        </Link>
         <Link href="mailto:support@apexswap.org">
-          <Image size={45} src={Icon5} variant="avatar" alt="icon" />
+          <Image size={45} src={Icon2} variant="avatar" alt="icon" />
         </Link>
       </Box>
     </>

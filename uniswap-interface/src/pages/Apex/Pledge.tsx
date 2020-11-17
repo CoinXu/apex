@@ -3,42 +3,42 @@ import { Input as NumericalInput } from '../../components/NumericalInput'
 import { ButtonPrimary } from '../../components/Button'
 import Card from '../../components/Card'
 import { Box } from 'rebass'
-import styled from 'styled-components'
+// import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks'
 import { stake } from '../../hooks/apex'
 import { useApexState } from '../../state/apex/hooks'
 import { TYPE } from '../../theme'
 // import { APEX_MAIN_ADRESS } from '../../constants'
 
-export const StyledBalanceMax = styled.button<{ 
-  width?: string, 
-  height?: string, 
-  padding?: string }>`
-  background-color: ${({ theme }) => theme.primary5};
-  border: 1px solid ${({ theme }) => theme.primary5};
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
+// export const StyledBalanceMax = styled.button<{ 
+//   width?: string, 
+//   height?: string, 
+//   padding?: string }>`
+//   background-color: ${({ theme }) => theme.primary5};
+//   border: 1px solid ${({ theme }) => theme.primary5};
+//   border-radius: 0.5rem;
+//   font-size: 0.875rem;
 
-  font-weight: 500;
-  cursor: pointer;
-  margin-right: 0.5rem;
-  color: ${({ theme }) => theme.primaryText1};
-  :hover {
-    border: 1px solid ${({ theme }) => theme.primary1};
-  }
-  :focus {
-    border: 1px solid ${({ theme }) => theme.primary1};
-    outline: none;
-  }
+//   font-weight: 500;
+//   cursor: pointer;
+//   margin-right: 0.5rem;
+//   color: ${({ theme }) => theme.primaryText1};
+//   :hover {
+//     border: 1px solid ${({ theme }) => theme.primary1};
+//   }
+//   :focus {
+//     border: 1px solid ${({ theme }) => theme.primary1};
+//     outline: none;
+//   }
 
-  width: ${({ width }) => (width ? width: 'auto')};
-  height: ${({ height }) => (height ? height : '28px')};
-  padding: ${({ padding }) => (padding ? padding : '0 0')};
-  text-align: center;
-  ${({ theme }) => theme.mediaWidth.upToExtraSmall`
-    margin-right: 0.5rem;
-  `};
-`
+//   width: ${({ width }) => (width ? width: 'auto')};
+//   height: ${({ height }) => (height ? height : '28px')};
+//   padding: ${({ padding }) => (padding ? padding : '0 0')};
+//   text-align: center;
+//   ${({ theme }) => theme.mediaWidth.upToExtraSmall`
+//     margin-right: 0.5rem;
+//   `};
+// `
 
 export interface CurrencyInputGroupOption {
   value: string | number;
@@ -61,8 +61,9 @@ export function CurrencyInputGroup({
   return (
     <Box sx={{
       display: 'grid',
-      // gridTemplateColumns: 'auto auto 80px',
-      gridTemplateColumns: 'auto 80px',
+      gridTemplateColumns: 'auto 50px 80px',
+      // gridTemplateColumns: 'auto 80px',
+      alignItems: 'center',
       columnGap: '6px'
     }}>
       <Box padding="0.5rem 0 0.5rem 0.5rem">
@@ -77,9 +78,10 @@ export function CurrencyInputGroup({
           }}
         />
       </Box>
-      {/* <Box>
-        <StyledBalanceMax width="100%" onClick={() => { }}>{helpButtonText}</StyledBalanceMax>
-      </Box> */}
+      <Box>
+        {/* <StyledBalanceMax width="100%" onClick={() => { }}>{helpButtonText}</StyledBalanceMax> */}
+        <TYPE.main textAlign="center" fontSize={14} color="primary1">{helpButtonText}</TYPE.main>
+      </Box>
       <Box height="100%">
         <ButtonPrimary 
           onClick={() => onButtonClick(v)}
@@ -106,7 +108,7 @@ export default function Pledge() {
     <Card border="1px solid #52C18B" backgroundColor="#fff" padding="0">
       <CurrencyInputGroup
         value=""
-        helpButtonText="max"
+        helpButtonText="最大值"
         buttonText="质押"
         placeholder="请输入金额"
         onButtonClick={(value: string) => {

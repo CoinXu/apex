@@ -16,3 +16,12 @@ SSH密码：7Za*m72>8+N=Ccnf
 port: 65002
 user: u296682092
 password:L+iu/orr5c*
+
+首页：刷新首页
+挖矿：页面滑动到推荐链接模块
+兑换：跳转到项目的Swap页面
+流动性：页面滑动Apex锁仓总量和发行总量的模块
+Top10:页面滑动到Top10竞赛排名
+APEX：页面滑动到APEX Swap
+Jion："https://t.me/apexswap"
+

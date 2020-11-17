@@ -81,7 +81,7 @@ export default function App() {
     <Suspense fallback={null}>
       <Route component={GoogleAnalyticsReporter} />
       <Route component={DarkModeQueryParamReader} />
-      <AppWrapper style={{ background: 'linear-gradient(-180deg, #F1F8F2, #FFFFFF)' }}>
+      <AppWrapper style={{ background: 'linear-gradient(-180deg, #F1F8F2, #FFFFFF)', maxWidth: '420px', margin: '0 auto' }}>
         {/* <URLWarning /> */}
         <HeaderWrapper>
           <Header />

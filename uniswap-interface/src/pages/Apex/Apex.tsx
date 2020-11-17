@@ -1,10 +1,10 @@
 import React, { useRef, useEffect } from 'react'
 import Card from '../../components/Card'
-// import Copy from '../../components/AccountDetails/Copy'
+import Copy from '../../components/AccountDetails/Copy'
 import { IconWrapper } from '../../theme/components'
 import { TYPE } from '../../theme'
 import { Box } from 'rebass'
-// import { APEX_MAIN_ADRESS } from '../../constants'
+import { APEX_MAIN_ADRESS } from '../../constants'
 import { useApexState } from '../../state/apex/hooks'
 import F2 from '@antv/f2'
 
@@ -103,18 +103,18 @@ export default function Apex() {
   const state = useApexState()
 
   return (
-    <Card border="1px solid #63c695">
-      <TYPE.subHeader>APEX</TYPE.subHeader>
+    <Card border="1px solid #63c695" backgroundColor="#fff">
+      <TYPE.largeHeader fontSize={20}>APEX</TYPE.largeHeader>
       <Box
         pt={20}
         sx={{
           display: 'grid',
           gridTemplateColumns: '80px auto',
-          gridTemplateRows: 'repeat(5, 24px)',
+          gridTemplateRows: 'repeat(7, 24px)',
           columnGap: '6px',
           rowGap: '6px'
         }}>
-        {/* <Box>
+        <Box>
           <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             合约地址：
           </TYPE.darkGray>
@@ -128,11 +128,21 @@ export default function Apex() {
             {APEX_MAIN_ADRESS.replace(/^(\w{6})(\w+?)(\w{6})$/, (a, b, c, d) => b + '...' + d)}
           </TYPE.darkGray>
           <Copy toCopy={APEX_MAIN_ADRESS}>
-            <TYPE.blue fontWeight={0} fontSize={14} style={{ color: '#333'}}>
+            <TYPE.blue fontWeight={0} fontSize={14}>
               复制
             </TYPE.blue>
           </Copy>
-        </Box> */}
+        </Box>
+        <Box>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
+            锁仓总量：
+          </TYPE.darkGray>
+        </Box>
+        <Box>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
+            -
+          </TYPE.darkGray>
+        </Box>
         <Box>
           <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             发行总量：
@@ -143,16 +153,6 @@ export default function Apex() {
             -
           </TYPE.darkGray>
         </Box>
-        {/* <Box>
-          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
-            持币总量：
-          </TYPE.darkGray>
-        </Box>
-        <Box>
-          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
-            -
-          </TYPE.darkGray>
-        </Box> */}
         <Box>
           <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             持币地址：
@@ -201,25 +201,25 @@ export default function Apex() {
           justifyContent: 'space-between'
         }}>
           <TYPE.main fontSize={18} color="primary1">$ 8888</TYPE.main>
-          <TYPE.main fontSize={14} style={{ color: '#2FD268' }} fontWeight={0}>+3.7%</TYPE.main>
+          <TYPE.main fontSize={14} style={{ color: '#2FD268' }}>+3.47%</TYPE.main>
         </Box>
         <Box pt={10} sx={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, max-content)',
-          columnGap: '16px'
+          columnGap: '14px'
         }}>
-          <IconWrapper size={22}><img src={ApexCoin} alt="apex coin" /></IconWrapper>
+          <IconWrapper size={25}><img src={ApexCoin} alt="apex coin" /></IconWrapper>
           <TYPE.main>{state.isFirstApexManning ? state.apexCount : '-'}</TYPE.main>
-          <TYPE.darkGray fontSize={14} fontWeight={0}>枚 APEX</TYPE.darkGray>
+          <TYPE.black fontSize={14}>枚 APEX</TYPE.black>
         </Box>
-        <Box sx={{
+        <Box mt="8px" sx={{
           display: 'grid',
           gridTemplateColumns: 'repeat(3, max-content)',
-          columnGap: '16px'
+          columnGap: '14px'
         }}>
-          <IconWrapper size={22}><img src={ETHCoin} alt="eth coin" /></IconWrapper>
+          <IconWrapper size={25}><img src={ETHCoin} alt="eth coin" /></IconWrapper>
           <TYPE.main>{state.isFirstApexManning ? state.ethBalance : '-'}</TYPE.main>
-          <TYPE.darkGray fontSize={14} fontWeight={0}>枚 ETH</TYPE.darkGray>
+          <TYPE.black fontSize={14}>枚 ETH</TYPE.black>
         </Box>
       </Box>
       <Box pt={20}>
@@ -229,7 +229,7 @@ export default function Apex() {
           justifyContent: 'space-between'
         }}>
           <TYPE.main fontSize={18} color="primary1">1:0.36</TYPE.main>
-          <TYPE.main fontSize={14} style={{ color: '#2FD268' }} fontWeight={0}>+3.7%</TYPE.main>
+          <TYPE.main fontSize={14} style={{ color: '#2FD268' }}>+3.47%</TYPE.main>
         </Box>
         <Box>
           <TYPE.darkGray fontSize={14} fontWeight={0}>
