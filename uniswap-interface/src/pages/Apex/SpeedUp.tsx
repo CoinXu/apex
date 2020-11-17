@@ -4,7 +4,7 @@ import { Box } from 'rebass'
 import { TYPE } from '../../theme'
 import Card from '../../components/Card'
 import { ButtonPrimary } from '../../components/Button'
-import { deposit } from '../../hooks/apex'
+import { apexAccelerate } from '../../hooks/apex'
 import { useActiveWeb3React } from '../../hooks'
 import { useApexState } from '../../state/apex/hooks'
 
@@ -25,7 +25,7 @@ export default function SpeedUp() {
     <>
       <Card border="1px solid #63c695" backgroundColor="#dff0e9" padding="0">
         <Box
-          width={['100%', '50%', '25%']}
+          width="100%"
           sx={{
             display: 'grid',
             gridTemplateColumns: '110px auto 80px',
@@ -63,8 +63,8 @@ export default function SpeedUp() {
           <Box height="100%">
             <ButtonPrimary
               onClick={() => {
-                if (!state.mainContract || !account) return
-                deposit(state.mainContract, state.isFirstApexManning, account, count, state.shareAccount || undefined)
+                if (!account) return
+                apexAccelerate(state.started, account, count, state.shareAccount || undefined)
               }}
               padding="2px 4px"
               width="100%"

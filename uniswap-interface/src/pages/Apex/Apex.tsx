@@ -5,7 +5,8 @@ import { IconWrapper } from '../../theme/components'
 import { TYPE } from '../../theme'
 import { Box } from 'rebass'
 import { APEX_MAIN_ADRESS } from '../../constants'
-import { useApexState } from '../../state/apex/hooks'
+import { useApexState, useGetApexDynamicInfoCallback } from '../../state/apex/hooks'
+import { useActiveWeb3React } from '../../hooks'
 import F2 from '@antv/f2'
 
 import ApexCoin from '../../assets/images/apex/apex_coin.png'
@@ -95,22 +96,30 @@ function Chart() {
   }, [canvas.current])
 
   return (
-    <canvas ref={canvas} id="cid" width="325" height="156" />
+    <canvas ref={canvas} id="cid" style={{ width: '100%', height: 160 }} />
   )
 }
 
 export default function Apex() {
   const state = useApexState()
+  const { account } = useActiveWeb3React()
+  const getApexDynamicInfo = useGetApexDynamicInfoCallback()
+
+  useEffect(() => { getApexDynamicInfo() }, [account])
+
+  console.log('state.dynamicInfo', state.dynamicInfo)
 
   return (
-    <Card border="1px solid #63c695" backgroundColor="#fff">
+    <Card 
+      border="1px solid #63c695" 
+      backgroundColor="#fff">
       <TYPE.largeHeader fontSize={20}>APEX</TYPE.largeHeader>
       <Box
         pt={20}
         sx={{
           display: 'grid',
           gridTemplateColumns: '80px auto',
-          gridTemplateRows: 'repeat(7, 24px)',
+          gridTemplateRows: 'repeat(6, 24px)',
           columnGap: '6px',
           rowGap: '6px'
         }}>
@@ -163,7 +172,7 @@ export default function Apex() {
             -
           </TYPE.darkGray>
         </Box>
-        <Box>
+        {/* <Box>
           <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             转帐次数：
           </TYPE.darkGray>
@@ -172,7 +181,7 @@ export default function Apex() {
           <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             -
           </TYPE.darkGray>
-        </Box>
+        </Box> */}
         <Box>
           <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             上线价格：
@@ -228,16 +237,18 @@ export default function Apex() {
           display: 'flex',
           justifyContent: 'space-between'
         }}>
-          <TYPE.main fontSize={18} color="primary1">1:0.36</TYPE.main>
+          <TYPE.darkGray fontSize={14} fontWeight={0}>
+            1:0.36
+          </TYPE.darkGray>
           <TYPE.main fontSize={14} style={{ color: '#2FD268' }}>+3.47%</TYPE.main>
         </Box>
         <Box>
-          <TYPE.darkGray fontSize={14} fontWeight={0}>
+          <TYPE.main fontSize={18} color="primary1">
             ≈ $96.1486
-          </TYPE.darkGray>
+          </TYPE.main>
         </Box>
       </Box>
-      <Box pt={20}>
+      <Box pt={20} width="100%">
         <TYPE.subHeader style={{ color: '#666' }}>价格走势</TYPE.subHeader>
         <Chart />
       </Box>

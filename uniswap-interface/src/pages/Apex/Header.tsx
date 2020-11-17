@@ -11,8 +11,8 @@ import i18n from '../../i18n'
 import ApexLogo from '../../assets/images/apex/icon_logo.png'
 
 const StyledLine = styled.div<{ width: number }>`
-  margin-bottom: 2px;
-  margin-top: 2px;
+  margin-bottom: 3px;
+  margin-top: 3px;
   width: ${({ width }) => `${width}px`};
   height: 2px;
   background: #007F73;
@@ -23,7 +23,7 @@ const IconThreeLine = React.forwardRef<any, any>(({ children, onClick }, ref) =>
     e.preventDefault();
     onClick(e);
   }}>
-    <StyledLine width={17} />
+    <StyledLine width={14} />
     <StyledLine width={10} />
     <StyledLine width={7} />
     {children}
@@ -52,8 +52,10 @@ export default function Header() {
   const { account } = useActiveWeb3React()
   return (
     <Box
+      className="apex-header"
       width="100%"
       padding="10px 18px"
+      style={{ position: 'fixed', top: 0, left: 0, zIndex: 999 }}
       backgroundColor="#fff"
       sx={{
         display: 'grid',
@@ -95,8 +97,8 @@ export default function Header() {
               <Dropdown.Item onClick={() => scrollIntoView("#manning")}>
                 挖矿
               </Dropdown.Item>
-              <Dropdown.Item>
-                <Link to="/swap">兑换</Link>
+              <Dropdown.Item href={window.location.origin + '/#/swap'}>
+                兑换
               </Dropdown.Item>
               <Dropdown.Item onClick={() => scrollIntoView("#apex")}>
                 流动性
@@ -111,7 +113,7 @@ export default function Header() {
             </Dropdown.Menu>
           </Dropdown>
         </Box>
-        <Box>
+        <Box className="apex-header-i18n">
           <Dropdown>
             <Dropdown.Toggle as={IconEN} variant="link" id="dropdown-en">
             </Dropdown.Toggle>

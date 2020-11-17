@@ -50,6 +50,7 @@ const HeaderWrapper = styled.div`
 const BodyWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 16px;
   width: 100%;
   padding-top: 100px;
   align-items: center;
@@ -83,7 +84,7 @@ export default function App() {
       <Route component={DarkModeQueryParamReader} />
       <AppWrapper style={{ background: 'linear-gradient(-180deg, #F1F8F2, #FFFFFF)', maxWidth: '420px', margin: '0 auto' }}>
         {/* <URLWarning /> */}
-        <HeaderWrapper>
+        <HeaderWrapper style={{ paddingBottom: '37px' }}>
           <Header />
           {/* <Header /> */}
         </HeaderWrapper>

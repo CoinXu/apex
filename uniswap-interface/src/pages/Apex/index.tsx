@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react'
 import { Redirect, RouteComponentProps } from 'react-router-dom'
+import CountDown from 'react-countdown'
+import CountDownRender from './CountDown'
 import Card from '../../components/Card'
 import { Box, Image } from 'rebass'
 import { ButtonPrimary } from '../../components/Button'
@@ -11,13 +13,16 @@ import UnlockPledge from './UnlockPledge'
 import Apex from './Apex'
 import Top10 from './Top10'
 import Intro from './Intro'
-import { harvest, claimLP } from '../../hooks/apex'
+import { apexHarvest, apexForcastAnnualization, apexReceivePrize } from '../../hooks/apex'
 import { useActiveWeb3React } from '../../hooks'
 import {
   useGetShareCodeCallback, useConsumeShareCodeCallback, useApexState,
   useCreateApexMainContractCallback, useCreateApexTokenContractCallback,
   useApexGetEarned, useGetApexCountCallback, useGetETHBalanceCallback, useGetETHPriceCallback,
-  useGetLPGenerationCompletedCallback
+
+  useGetApexHavaStartedCallback, useApexDecreaseRewardTimeCallback,
+  useGetApexCountOfLockStorageCallback, useGetTEHDynamicInfo,
+  useGetApexPrizeAmountCallback, useGetApexMiningCountCallback
 } from '../../state/apex/hooks'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
 // import { APEX_MAIN_ADRESS } from '../../constants'
@@ -32,6 +37,7 @@ import ApexHeaderIcon from '../../assets/images/apex/marginalia-bitcoin-minin.pn
 
 import { Carousel } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import './style.css'
 
 function Invitation() {
   const state = useApexState()
@@ -46,6 +52,7 @@ function Invitation() {
   const getApexCount = useGetApexCountCallback()
   const getETHBalance = useGetETHBalanceCallback()
   const getETHPrice = useGetETHPriceCallback()
+  const getApexMiningCount = useGetApexMiningCountCallback()
 
   useEffect(() => {
     if (account) getApexCount(account)
@@ -73,12 +80,6 @@ function Invitation() {
 
   useEffect(() => {
     if (state.mainContract && account) {
-      // const w3: any = window.web3
-      // const web3 = new Web3(w3.currentProvider)
-      // // @ts-ignore
-      // const contract = new web3.eth.Contract(ApexMasterABI, APEX_MAIN_ADRESS)
-      // debugger
-      // deposit(contract, account, APEX_MAIN_ADRESS)
       getEarned(state.mainContract, account)
     }
   }, [state.mainContract, account])
@@ -94,6 +95,10 @@ function Invitation() {
       consumeShareCode(qs.shareCode as string)
     }
   }, [qs.shareCode])
+
+  useEffect(() => {
+    if (account) getApexMiningCount(account)
+  }, [account])
 
   return (
     <>
@@ -121,7 +126,7 @@ function Invitation() {
         </Box>
         <Box mt={24} width="100%" display="flex" sx={{ alignItems: 'center' }}>
           <TYPE.blue fontSize={18} mr={11}>APEX:</TYPE.blue>
-          <TYPE.blue fontSize={22}>8888</TYPE.blue>
+          <TYPE.blue fontSize={22}>{state.mining}</TYPE.blue>
         </Box>
         <Box sx={{
           display: 'grid',
@@ -132,11 +137,11 @@ function Invitation() {
         }}>
           <Box style={{ lineHeight: 1 }} display="flex" sx={{ alignItems: 'center' }}>
             <TYPE.blue fontSize={14} fontWeight={0} mr={11}>≈</TYPE.blue>
-            <TYPE.blue fontSize={30}>$8888</TYPE.blue>
+            <TYPE.blue fontSize={30}>${state.mining}</TYPE.blue>
           </Box>
           <Box>
             <ButtonPrimary
-              onClick={() => state.mainContract && account && harvest(state.mainContract, state.isFirstApexManning, account)}
+              onClick={() => state.mainContract && account && apexHarvest(state.mainContract, state.started, account)}
               padding="2px 4px"
               width="60px"
               style={{ backgroundColor: '#DFF0E9' }}
@@ -153,17 +158,16 @@ function Invitation() {
 }
 
 function CurrencyPreview() {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const state = useApexState()
-  const getIsFirstApexManning = useGetLPGenerationCompletedCallback()
+  const getApexPrizeAmount = useGetApexPrizeAmountCallback()
+  const getApexCountOfLockStorage = useGetApexCountOfLockStorageCallback()
+  const getApexETHInfo = useGetTEHDynamicInfo()
 
-  useEffect(() => {
-    getIsFirstApexManning()
-  }, [getIsFirstApexManning, state.isFirstApexManning])
+  useEffect(() => { getApexPrizeAmount() }, [account])
+  useEffect(() => { if (chainId) getApexCountOfLockStorage(chainId) }, [account])
+  useEffect(() => { getApexETHInfo() }, [])
 
-  const bonus: number = state.isFirstApexManning
-    ? state.ethBalance * state.ethPrice * 0.07
-    : state.ethBalance * state.ethPrice
   return (
     <>
       <Card border="1px solid #63c695" backgroundColor="#fff">
@@ -179,13 +183,15 @@ function CurrencyPreview() {
             <TYPE.blue fontWeight={0}>锁仓总量：</TYPE.blue>
           </Box>
           <Box>
-            <TYPE.blue textAlign="right">- USD</TYPE.blue>
+            <TYPE.blue textAlign="right">
+              {state.countOfLockStorage} USD
+            </TYPE.blue>
           </Box>
           <Box>
             <TYPE.blue fontWeight={0}>预计年化：</TYPE.blue>
           </Box>
           <Box>
-            <TYPE.blue textAlign="right">-%</TYPE.blue>
+          <TYPE.blue textAlign="right">{apexForcastAnnualization()} %</TYPE.blue>
           </Box>
           <Box>
             <TYPE.blue fontWeight={0}>奖金池：</TYPE.blue>
@@ -194,7 +200,7 @@ function CurrencyPreview() {
             display: 'flex'
           }}>
             <ButtonPrimary
-              onClick={() => state.mainContract && account && claimLP(state.mainContract, account)}
+              onClick={() => state.mainContract && account && apexReceivePrize(account)}
               padding="0px 4px"
               width="60px"
               mr="10px"
@@ -204,7 +210,7 @@ function CurrencyPreview() {
                 领奖
               </TYPE.main>
             </ButtonPrimary>
-            <TYPE.blue>{bonus} USD</TYPE.blue>
+            <TYPE.blue>{state.prizeAmount} USD</TYPE.blue>
           </Box>
         </Box>
       </Card>
@@ -234,7 +240,20 @@ export function RedirectToApex(props: RouteComponentProps<{ shareCode: string }>
   )
 }
 
-export default function () {
+function DecreaseRewardTime() {
+  const { account } = useActiveWeb3React()
+  const state = useApexState()
+
+  const getApexHaveStarted = useGetApexHavaStartedCallback()
+  const getDecreaseRewardTime = useApexDecreaseRewardTimeCallback()
+
+  useEffect(() => {
+    getApexHaveStarted()
+  }, [account])
+  useEffect(() => {
+    getDecreaseRewardTime()
+  }, [account])
+
   return (
     <>
       <Box width="100%" sx={{
@@ -257,48 +276,46 @@ export default function () {
             WebkitTextFillColor: 'transparent'
           }}>
           创世挖矿倒计时
-          </TYPE.largeHeader>
-      </Box>
-      <Box width="100%" paddingTop="6px" style={{ textAlign: 'center' }}>
-        <Box style={{
-          display: 'inline-block',
-          padding: '6px 16px',
-          borderRadius: '24px',
-          backgroundColor: '#F1F8F2',
-          boxShadow: '2px 6px 6px 1px #dff0e9'
-        }}>
-          <TYPE.largeHeader
-            fontSize={24}
-            color="primary1"
-            style={{
-              textShadow: '0px 4px 5px rgba(0, 127, 115, 0.43)'
-            }}
-          >
-            88 : 06 : 06 : 06
         </TYPE.largeHeader>
-        </Box>
       </Box>
+      <CountDown 
+        date={Date.now() + state.decreaseRewardTime} 
+        renderer={CountDownRender} />
+    </>
+  )
+}
+
+function Banner() {
+  return (
+    <Carousel className="apex-home" nextIcon={null} prevIcon={null} style={{ width: '100%' }}>
+      <Carousel.Item>
+        <Image
+          src={ApexBanner0}
+          alt="APEX"
+          sx={{ width: '100%', borderRadius: '12px' }} />
+      </Carousel.Item>
+      <Carousel.Item>
+        <Image
+          src={ApexBanner1}
+          alt="APEX"
+          sx={{ width: '100%', borderRadius: '12px' }} />
+      </Carousel.Item>
+      <Carousel.Item>
+        <Image
+          src={ApexBanner2}
+          alt="APEX"
+          sx={{ width: '100%', borderRadius: '12px' }} />
+      </Carousel.Item>
+    </Carousel>
+  )
+}
+
+export default function () {
+  return (
+    <>
+      <DecreaseRewardTime />
       <Box width="100%" paddingTop="17px">
-        <Carousel nextIcon={null} prevIcon={null} style={{ width: '100%' }}>
-          <Carousel.Item>
-            <Image
-              src={ApexBanner0}
-              alt="APEX"
-              sx={{ width: ['100%', 'auto'], borderRadius: '12px' }} />
-          </Carousel.Item>
-          <Carousel.Item>
-            <Image
-              src={ApexBanner1}
-              alt="APEX"
-              sx={{ width: ['100%', 'auto'], borderRadius: '12px' }} />
-          </Carousel.Item>
-          <Carousel.Item>
-            <Image
-              src={ApexBanner2}
-              alt="APEX"
-              sx={{ width: ['100%', 'auto'], borderRadius: '12px' }} />
-          </Carousel.Item>
-        </Carousel>
+        <Banner />
       </Box>
       <Box width="100%" pt={24} id="manning">
         <Invitation />

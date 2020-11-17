@@ -3,8 +3,10 @@ import Card from '../../components/Card'
 import { Box, Image } from 'rebass'
 import { TYPE } from '../../theme'
 // import styled from 'styled-components'
+import CountDown from 'react-countdown'
+import CountDownRender from './CountDown'
 import { useActiveWeb3React } from '../../hooks'
-import { useGetApexTop10Callback, useGetUserReferralsCallback } from '../../state/apex/hooks'
+import { useGetApexTop10Callback, useApexState } from '../../state/apex/hooks'
 
 import Top1 from '../../assets/images/apex/top1.png'
 import Top2 from '../../assets/images/apex/top2.png'
@@ -17,18 +19,19 @@ import Top3 from '../../assets/images/apex/top3.png'
 //   box-shadow: 0 0 1px 8px outside;
 // `
 
+
+function viewAddress(address: string) {
+  return address.replace(/^(\w{4})(\w+?)(\w{4})$/, (a, b, c, d) => c + '...' + d)
+}
+
 export default function Top10() {
+  const state = useApexState()
   const { account } = useActiveWeb3React()
-  const getTop10 = useGetApexTop10Callback()
-  const getUserReferrals = useGetUserReferralsCallback()
+  const getTop10List = useGetApexTop10Callback()
 
-  useEffect(() => {
-    getTop10()
-  }, [account])
+  useEffect(() => { getTop10List() }, [account])
 
-  useEffect(() => {
-    if (account) getUserReferrals(account)
-  }, [account])
+  const [f, s, t, ...others] = state.top10
 
   return (
     <Card border="1px solid #63c695" backgroundColor="#fff">
@@ -49,26 +52,9 @@ export default function Top10() {
           WebkitTextFillColor: 'transparent'
         }}
         textAlign="center">倒计时</TYPE.mediumHeader>
-      <Box width="100%" paddingTop="6px" style={{ textAlign: 'center' }}>
-        <Box style={{
-          display: 'inline-block',
-          padding: '6px 16px',
-          borderRadius: '24px',
-          backgroundColor: '#F1F8F2',
-          boxShadow: '2px 6px 6px 1px #dff0e9'
-        }}>
-          <TYPE.largeHeader
-            fontSize={24}
-            color="primary1"
-            style={{
-              textShadow: '0px 4px 5px rgba(0, 127, 115, 0.43)'
-            }}
-          >
-            88 : 06 : 06 : 06
-        </TYPE.largeHeader>
-        </Box>
-      </Box>
-
+      <CountDown 
+        date={Date.now() + state.decreaseRewardTime} 
+        renderer={CountDownRender} />
       <Box pt={16} sx={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
@@ -85,8 +71,12 @@ export default function Top10() {
           justifyItems: 'center'
         }}>
           <Image mb={10} src={Top2} variant="ravatar" alt="top 2" />
-          <TYPE.black fontSize={14}>-- APEX</TYPE.black>
-          <TYPE.blue fontSize={20}>-- ETH</TYPE.blue>
+          <TYPE.black fontSize={14}>
+            {s ? viewAddress(s.address) : '-'}
+          </TYPE.black>
+          <TYPE.blue fontSize={20}>
+            {s ? s.eth : 0} ETH
+          </TYPE.blue>
         </Box>
         <Box sx={{
           display: 'grid',
@@ -96,8 +86,12 @@ export default function Top10() {
           justifyItems: 'center'
         }}>
           <Image mb={10} src={Top1} variant="ravatar" alt="top 1" />
-          <TYPE.black fontSize={14}>-- APEX</TYPE.black>
-          <TYPE.blue fontSize={20}>-- ETH</TYPE.blue>
+          <TYPE.black fontSize={14}>
+            {f ? viewAddress(f.address) : '-'}
+          </TYPE.black>
+          <TYPE.blue fontSize={20}>
+            {f ? f.eth : 0} ETH
+          </TYPE.blue>
         </Box>
         <Box sx={{
           display: 'grid',
@@ -107,30 +101,34 @@ export default function Top10() {
           justifyItems: 'center'
         }}>
           <Image mb={10} src={Top3} variant="ravatar" alt="top 3" />
-          <TYPE.black fontSize={14}>-- APEX</TYPE.black>
-          <TYPE.blue fontSize={20}>-- ETH</TYPE.blue>
+          <TYPE.black fontSize={14}>
+            {t ? viewAddress(t.address) : '-'}
+          </TYPE.black>
+          <TYPE.blue fontSize={20}>
+            {t ? t.eth : 0} ETH
+          </TYPE.blue>
         </Box>
       </Box>
       <Box pt={16} sx={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
         columnGap: '12px',
-        gridTemplateRows: 'repeat(4, auto)',
+        gridTemplateRows: 'repeat(' + others.length + ', auto)',
         justifyContent: 'center',
         alignItems: 'flex-end',
         justifyItems: 'center'
       }}>
-        <TYPE.darkGray fontSize={14}>Top4</TYPE.darkGray>
-        <TYPE.darkGray fontSize={14}>-- APEX</TYPE.darkGray>
-        <TYPE.darkGray fontSize={14}>-- ETH</TYPE.darkGray>
-
-        {/* <TYPE.black>Top4</TYPE.black>
-        <TYPE.black>888...APEX</TYPE.black>
-        <TYPE.black>888...ETH</TYPE.black>
-
-        <TYPE.black>Top4</TYPE.black>
-        <TYPE.black>888...APEX</TYPE.black>
-        <TYPE.black>888...ETH</TYPE.black> */}
+        {others.map((r, i) => (
+          <>
+            <TYPE.darkGray fontSize={14}>Top{4 + i}</TYPE.darkGray>
+            <TYPE.darkGray fontSize={14}>
+              {f ? viewAddress(f.address) : '-'}
+            </TYPE.darkGray>
+            <TYPE.darkGray fontSize={14}>
+              {f ? f.eth : 0} ETH
+            </TYPE.darkGray>
+          </>
+        ))}
       </Box>
     </Card>
   )

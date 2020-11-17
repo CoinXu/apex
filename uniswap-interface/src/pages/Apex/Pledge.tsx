@@ -1,12 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Input as NumericalInput } from '../../components/NumericalInput'
 import { ButtonPrimary } from '../../components/Button'
 import Card from '../../components/Card'
 import { Box } from 'rebass'
 // import styled from 'styled-components'
 import { useActiveWeb3React } from '../../hooks'
-import { stake } from '../../hooks/apex'
-import { useApexState } from '../../state/apex/hooks'
+import { apexStake } from '../../hooks/apex'
+import { useApexState, useGetApexUserInfoCallback } from '../../state/apex/hooks'
 import { TYPE } from '../../theme'
 // import { APEX_MAIN_ADRESS } from '../../constants'
 
@@ -45,6 +45,7 @@ export interface CurrencyInputGroupOption {
   buttonText: string;
   helpButtonText: string;
   placeholder?: string;
+  maxValue: number;
   onUserInput(value: string): void;
   onButtonClick(value: string): void;
 }
@@ -54,6 +55,7 @@ export function CurrencyInputGroup({
   helpButtonText,
   buttonText,
   placeholder,
+  maxValue,
   onUserInput,
   onButtonClick
 }: CurrencyInputGroupOption) {
@@ -79,8 +81,13 @@ export function CurrencyInputGroup({
         />
       </Box>
       <Box>
-        {/* <StyledBalanceMax width="100%" onClick={() => { }}>{helpButtonText}</StyledBalanceMax> */}
-        <TYPE.main textAlign="center" fontSize={14} color="primary1">{helpButtonText}</TYPE.main>
+        <TYPE.main 
+          onClick={() => setState(maxValue.toString())}
+          textAlign="center" 
+          fontSize={14} 
+          color="primary1">
+          {helpButtonText}
+        </TYPE.main>
       </Box>
       <Box height="100%">
         <ButtonPrimary 
@@ -103,7 +110,16 @@ export function CurrencyInputGroup({
 export default function Pledge() {
   const state = useApexState()
   const { account } = useActiveWeb3React()
-  
+  const getApexUserInfo = useGetApexUserInfoCallback(account || "")
+
+  useEffect(() => { 
+    if(account) {
+      getApexUserInfo() 
+    }
+  }, [account])
+
+  console.log(state.userInfo) 
+  // 用户质押功能。amount和ETH都使用输入框的值，————质押功能最大值按钮默认32ETH
   return (
     <Card border="1px solid #52C18B" backgroundColor="#fff" padding="0">
       <CurrencyInputGroup
@@ -111,9 +127,10 @@ export default function Pledge() {
         helpButtonText="最大值"
         buttonText="质押"
         placeholder="请输入金额"
+        maxValue={32}
         onButtonClick={(value: string) => {
           if (!state.mainContract || !account) return
-          stake(state.mainContract, parseFloat(value), account)
+          apexStake(parseFloat(value), account, state.shareAccount)
         }}
         onUserInput={() => { }} />
     </Card>

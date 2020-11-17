@@ -16,6 +16,7 @@ export default function Pledge() {
         helpButtonText="最大值"
         buttonText="解除质押"
         placeholder="请输入金额"
+        maxValue={state.userInfo.rewardDebt}
         onButtonClick={(value: string) => {
           if (!state.mainContract || !account) return
           unstake(state.mainContract, parseFloat(value), account)

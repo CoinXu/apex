@@ -1,0 +1,41 @@
+.apex-header .dropdown-menu {
+    min-width: unset;
+}
+
+.apex-header .dropdown-menu {
+    transform: translate3d(-40px, 29px, 0px)!important;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    background-color: #76c998;
+    border: 0;
+} 
+
+.apex-header .dropdown-item {
+    color: #fff;
+    padding: 2px 20px;
+    text-align: center;
+}
+
+.apex-header-i18n .dropdown-menu {
+    transform: translate3d(-36px, 35px, 0px)!important;
+}
+
+.apex-home {}
+
+.apex-home .carousel-indicators {
+    margin-right: 12px;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+}
+
+.apex-home .carousel-indicators li {
+    width: 10px;
+    height: 10px;
+    background: #EEEEEE;
+    border-radius: 50%;
+    border: 0;
+}
+
+.apex-home .carousel-indicators li.active {
+    background: #007F73;
+}

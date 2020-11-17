@@ -2,8 +2,13 @@ import { createReducer } from '@reduxjs/toolkit'
 import { 
   fetchShareCode, consumeShareCode, createApexMainContract, 
   createApexTokenContract, getApexCount, getETHBalance, getETHPrice,
-  getApexTop10, getUserReferrals
+  getApexTop10, getUserReferrals,
+
+  getApexUserInfo, getApexHaveStarted, getApexDecreaseRewardTime,
+  getApexMiningCount, getApexCountOfLockStorage, getApexDynamicInfo, 
+  getApexPrizeAmount
 } from './actions'
+import { ApexETHInfo, ApexDynamicInfoStruct, ApexTop10ItemStruct, ApexUserInfo } from '../../hooks/apex'
 import { Contract } from 'web3-eth-contract'
 
 export interface ApexState {
@@ -16,8 +21,17 @@ export interface ApexState {
   readonly ethBalance: number;
   readonly ethPrice: number;
   readonly isFirstApexManning: boolean;
-  readonly top10: any[];
   readonly userReferrals: any[];
+
+  readonly started: boolean;
+  readonly decreaseRewardTime: number;
+  readonly mining: number;
+  readonly countOfLockStorage: number;
+  readonly userInfo: ApexUserInfo;
+  readonly top10: ApexTop10ItemStruct[];
+  readonly dynamicInfo: ApexDynamicInfoStruct;
+  readonly prizeAmount: number;
+  readonly ethInfo: ApexETHInfo;
 }
 
 const initialState: ApexState = {
@@ -30,8 +44,17 @@ const initialState: ApexState = {
   ethBalance: 0,
   ethPrice: 0,
   isFirstApexManning: false,
+  userReferrals: [],
+
+  started: false,
+  decreaseRewardTime: 0,
+  mining: 0,
+  countOfLockStorage: 0,
+  userInfo: { amount: 0, rewardDebt: 0 },
   top10: [],
-  userReferrals: []
+  dynamicInfo: {},
+  prizeAmount: 0,
+  ethInfo: { price: 0 }
 }
 
 export default createReducer(initialState, builder => {
@@ -64,5 +87,28 @@ export default createReducer(initialState, builder => {
   })
   .addCase(getUserReferrals, (state, action) => {
     state.userReferrals = action.payload.list
+  })
+
+  /////////////////////////////////
+  .addCase(getApexUserInfo, (state, action) => {
+    state.userInfo = action.payload.info
+  })
+  .addCase(getApexHaveStarted, (state, action) => {
+    state.started = action.payload.started
+  })
+  .addCase(getApexDecreaseRewardTime, (state, action) => {
+    state.decreaseRewardTime = action.payload.time
+  })
+  .addCase(getApexMiningCount, (state, action) => {
+    state.mining = action.payload.count
+  })
+  .addCase(getApexCountOfLockStorage, (state, action) => {
+    state.countOfLockStorage = action.payload.count
+  })
+  .addCase(getApexDynamicInfo, (state, action) => {
+    state.dynamicInfo = action.payload.info
+  })
+  .addCase(getApexPrizeAmount, (state, action) => {
+    state.prizeAmount = action.payload.amount
   })
 })
