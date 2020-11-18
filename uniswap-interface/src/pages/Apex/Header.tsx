@@ -97,7 +97,7 @@ export default function Header() {
               <Dropdown.Item onClick={() => scrollIntoView("#manning")}>
                 挖矿
               </Dropdown.Item>
-              <Dropdown.Item href={window.location.origin + '/#/swap'}>
+              <Dropdown.Item onClick={() => window.location.href = window.location.origin + '/swap'}>
                 兑换
               </Dropdown.Item>
               <Dropdown.Item onClick={() => scrollIntoView("#apex")}>

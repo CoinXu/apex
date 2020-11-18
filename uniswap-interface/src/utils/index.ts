@@ -10,9 +10,10 @@ import { abi as ApexExchangeConnectorABI }  from '../constants/abis/ApexExchange
 import { abi as ApexTopReferralsABI }  from '../constants/abis/ApexTopReferrer.json'
 import { 
   ROUTER_ADDRESS, APEX_MAIN_ADRESS, APEX_LP_TOKEN_ADRESS, 
-  APEX_EXCHANGE_CONNECTOR_ADRESS, APEX_TOP_REFERRER_ADRESS 
+  APEX_EXCHANGE_CONNECTOR_ADRESS, APEX_TOP_REFERRER_ADRESS,
+  APEX_WETH_ADDRESS
 } from '../constants'
-import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER, WETH } from '@uniswap/sdk'
+import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from '@uniswap/sdk'
 import { TokenAddressMap } from '../state/lists/hooks'
 import Web3 from 'web3'
 import { Contract as ETHContract } from 'web3-eth-contract'
@@ -131,9 +132,9 @@ export function getApexExchangeConnectorContract(library?: Web3Provider): ETHCon
 
 export function getApexWETHContract(chainId?: ChainId): ETHContract {
   // const { chainId } = useActiveWeb3React()
-  const address: string = chainId ? WETH[chainId].address : WETH[ChainId.MAINNET].address
-  // const address: string = '0x80C68d6FF578fbdF7D2aee31BD2FdEf337585319'
-  return createApexContract(ApexTokenABI, address)
+  // const address: string = chainId ? WETH[chainId].address : WETH[ChainId.MAINNET].address
+  console.log(chainId)
+  return createApexContract(ApexTokenABI, APEX_WETH_ADDRESS)
 }
 
 // account is optional
