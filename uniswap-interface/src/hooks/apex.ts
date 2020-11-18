@@ -102,8 +102,10 @@ export async function apexStake(amount: number, account: string, address: string
   address = address || APEX_DEFAULT_REFERRER_ADDRESS
   await getApexMainContract()
     .methods
+     // pid, amount, account, refereraddress
     .deposit(APEX_STAKE_POOL_ID,
       new BigNumber(amount).times(new BigNumber(10).pow(18)).toString(),
+      account,
       address
     )
     .send({
@@ -117,7 +119,8 @@ export async function apexUnstake(amount: number, account: string): Promise<void
   await getApexMainContract()
     .methods
     .deposit(APEX_STAKE_POOL_ID,
-      new BigNumber(amount).times(new BigNumber(10).pow(18)).toString()
+      new BigNumber(amount).times(new BigNumber(10).pow(18)).toString(),
+      account
     )
     .send({ from: account })
 }

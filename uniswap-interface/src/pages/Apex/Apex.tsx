@@ -219,7 +219,7 @@ export default function Apex() {
         }}>
           <IconWrapper size={25}><img src={ApexCoin} alt="apex coin" /></IconWrapper>
           <TYPE.main>{state.isFirstApexManning ? state.apexCount : '-'}</TYPE.main>
-          <TYPE.black fontSize={14}>枚 APEX</TYPE.black>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}> APEX</TYPE.darkGray>
         </Box>
         <Box mt="8px" sx={{
           display: 'grid',
@@ -228,16 +228,16 @@ export default function Apex() {
         }}>
           <IconWrapper size={25}><img src={ETHCoin} alt="eth coin" /></IconWrapper>
           <TYPE.main>{state.isFirstApexManning ? state.ethBalance : '-'}</TYPE.main>
-          <TYPE.black fontSize={14}>枚 ETH</TYPE.black>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}> ETH</TYPE.darkGray>
         </Box>
       </Box>
-      <Box pt={20}>
+      <Box pt={22}>
         <TYPE.subHeader>价格（APEX:ETH）</TYPE.subHeader>
-        <Box pt={12} sx={{
+        <Box sx={{
           display: 'flex',
           justifyContent: 'space-between'
         }}>
-          <TYPE.darkGray fontSize={14} fontWeight={0}>
+          <TYPE.darkGray fontSize={14} fontWeight={0} style={{ color: '#333' }}>
             1:0.36
           </TYPE.darkGray>
           <TYPE.main fontSize={14} style={{ color: '#2FD268' }}>+3.47%</TYPE.main>

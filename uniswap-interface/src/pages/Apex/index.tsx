@@ -279,6 +279,8 @@ function DecreaseRewardTime() {
         </TYPE.largeHeader>
       </Box>
       <CountDown 
+        overtime
+        autoStart
         date={Date.now() + state.decreaseRewardTime} 
         renderer={CountDownRender} />
     </>
@@ -313,29 +315,31 @@ function Banner() {
 export default function () {
   return (
     <>
-      <DecreaseRewardTime />
+      <Box width="100%" id="reward-time">
+        <DecreaseRewardTime />
+      </Box>
       <Box width="100%" paddingTop="17px">
         <Banner />
       </Box>
-      <Box width="100%" pt={24} id="manning">
+      <Box width="100%" pt={20} id="manning">
         <Invitation />
       </Box>
-      <Box width="100%" pt={24}>
+      <Box width="100%" pt={18}>
         <CurrencyPreview />
       </Box>
-      <Box width="100%" pt={24}>
+      <Box width="100%" pt={21}>
         <SpeedUp />
       </Box>
-      <Box width="100%" pt={12}>
+      <Box width="100%" pt={10}>
         <Pledge />
       </Box>
-      <Box width="100%" pt={12}>
+      <Box width="100%" pt={10}>
         <UnlockPledge />
       </Box>
-      <Box width="100%" pt={24} id="apex">
+      <Box width="100%" pt={20} id="apex">
         <Apex />
       </Box>
-      <Box width="100%" pt={24} id="top10">
+      <Box width="100%" pt={18} id="top10">
         <Top10 />
       </Box>
       <Box width="100%" id="apex-swap">

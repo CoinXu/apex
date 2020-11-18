@@ -16,11 +16,11 @@ import Icon5 from '../../assets/images/apex/icon_1_5.png'
 export default function Intro() {
   return (
     <>
-      <TYPE.largeHeader textAlign="center" mt={32} color="primary1">
+      <TYPE.largeHeader textAlign="center" mt={30} color="primary1">
         APEX Swap
       </TYPE.largeHeader>
       <Card
-        mt={20}
+        mt={10}
         padding="0"
         border="1px solid #8fca97"
         overflow="hidden"
@@ -38,7 +38,7 @@ export default function Intro() {
           <Image src={IconHammer} size={32} />
         </Box>
         <Box pt={20} backgroundColor="#8fca97" padding="1rem">
-          <TYPE.body color="white">
+          <TYPE.body fontSize={14} color="white">
             APEX，无预挖，零预留，超共识阶梯式减产机制，合约私钥即时销毁，流动池永久开放，与玩家共同创造一个开放与自由的去中心化金融世界。
           </TYPE.body>
         </Box>
@@ -62,13 +62,13 @@ export default function Intro() {
           <Image src={IconCup} size={32} />
         </Box>
         <Box pt={20} backgroundColor="#8fca97" padding="1rem">
-          <TYPE.body color="white">
+          <TYPE.body fontSize={14} color="white">
             Top10竞赛机制，将吸引更多令牌玩家的加入，分享属于个人的财富盛宴，这是一场基于区块链，去中心化的现实版头号玩家，APEX机制由智能合约运行，无法篡改，一经创世开启将永久运行下去。
           </TYPE.body>
         </Box>
       </Card>
 
-      <Box pt={30} style={{ textAlign: 'center' }}>
+      <Box pt={20} style={{ textAlign: 'center' }}>
         <TYPE.mediumHeader color="primary1">合约审计机构</TYPE.mediumHeader>
         <Box>
           <Image mt={16} src={IconBeosin} width="102px" height="49px" alt="icon beosin" />
@@ -77,13 +77,13 @@ export default function Intro() {
           <Image mt={10} src={IconLogo} width="84px" height="28px" alt="apex logo" />
         </Box>
         <Box mt="8px">
-          <Link href="mailto:support@apexswap.org">
+          {/* <Link href="mailto:support@apexswap.org"> */}
             <TYPE.black fontSize={14} fontWeight={0} style={{ color: '#333' }}>support@apexswap.org</TYPE.black>
-          </Link>
+          {/* </Link> */}
         </Box>
       </Box>
 
-      <Box width="100%" mt={12} sx={{
+      <Box width="100%" mt={10} sx={{
         display: 'grid',
         gridTemplateColumns: 'repeat(5, max-content)',
         columnGap: '6px',

@@ -53,6 +53,8 @@ export default function Top10() {
         }}
         textAlign="center">倒计时</TYPE.mediumHeader>
       <CountDown 
+        overtime
+        autoStart
         date={Date.now() + state.decreaseRewardTime} 
         renderer={CountDownRender} />
       <Box pt={16} sx={{

@@ -39,13 +39,35 @@ const IconEN = React.forwardRef<any, any>(({ children, onClick }, ref) => (
   </Box>
 ));
 
-function scrollIntoView(selector: string) {
-  if (!selector) return
-
+function scrollIntoView(selector: string, offset: number = 46) {
   const element = document.querySelector(selector)
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+  if (!element) return
+
+  const bodyRect = document.body.getBoundingClientRect().top
+  const elementRect = element.getBoundingClientRect().top
+  const elementPosition = elementRect - bodyRect
+  const offsetPosition = elementPosition - offset
+
+  window.scrollTo({
+    top: offsetPosition,
+    behavior: 'smooth'
+  })
+
+  // const headerOffset = 46;
+  // const elementPosition = element.getBoundingClientRect().top;
+  // const offsetPosition = elementPosition - headerOffset;
+
+  // window.scrollTo({
+  //   top: offsetPosition,
+  //   behavior: "smooth"
+  // });
+
+  // if (!selector) return
+
+  // const element = document.querySelector(selector)
+  // if (element) {
+  //   element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  // }
 }
 
 export default function Header() {
@@ -71,7 +93,7 @@ export default function Header() {
       <Box sx={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, auto)',
-        columnGap: '12px',
+        columnGap: '20px',
         justifyContent: 'space-between',
         alignItems: 'center'
       }}>
@@ -93,7 +115,7 @@ export default function Header() {
             <Dropdown.Toggle as={IconThreeLine} variant="link" id="dropdown-basic">
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              <Dropdown.Item href="/">首页</Dropdown.Item>
+              <Dropdown.Item onClick={() => scrollIntoView('#reward-time', 66)}>首页</Dropdown.Item>
               <Dropdown.Item onClick={() => scrollIntoView("#manning")}>
                 挖矿
               </Dropdown.Item>
