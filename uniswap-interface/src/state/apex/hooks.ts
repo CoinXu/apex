@@ -13,12 +13,24 @@ import {
 
   getApexUserInfo, getApexHaveStarted, getApexDecreaseRewardTime,
   getApexMiningCount, getApexCountOfLockStorage, getApexDynamicInfo, 
-  getApexPrizeAmount, getApexETHInfo
+  getApexPrizeAmount, getApexETHInfo, getApexForcastAnnualization
 } from './actions'
 import { ChainId } from '@uniswap/sdk'
 
 export function useApexState(): AppState['apex'] {
   return useSelector<AppState, AppState['apex']>(state => state.apex)
+}
+
+export function useApexForcastAnnualizationCallback() {
+  const dispatch = useDispatch<AppDispatch>()
+
+  return useCallback(
+    async() => {
+      const n = await hooks.apexForcastAnnualization()
+      dispatch(getApexForcastAnnualization({ value: n }))
+    },
+    [dispatch]
+  )
 }
 
 export function useGetTEHDynamicInfo() {

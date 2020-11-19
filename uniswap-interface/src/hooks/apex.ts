@@ -7,7 +7,10 @@ import {
   getApexTopReferrerContract,
   getApexWETHContract
 } from '../utils'
-import { APEX_MAIN_ADRESS, APEX_DEFAULT_REFERRER_ADDRESS, APEX_TOP_REFERRER_ADRESS } from '../constants'
+import {
+  APEX_MAIN_ADRESS, APEX_DEFAULT_REFERRER_ADDRESS, APEX_TOP_REFERRER_ADRESS,
+  APEX_LP_TOKEN_ADRESS
+} from '../constants'
 import { ChainId } from '@uniswap/sdk'
 import axios from 'axios'
 
@@ -42,7 +45,9 @@ export async function apexMiningCount(account: string): Promise<number> {
     .pendingApex(APEX_STAKE_POOL_ID, account)
     .call()
 
-  return new BigNumber(lp).plus(new BigNumber(stake)).toNumber()
+  const n = new BigNumber(lp).plus(new BigNumber(stake))
+  const r = web3.utils.fromWei(n.toString(), 'ether')
+  return parseFloat(r)
 }
 
 // 锁仓总量：总合约在pair合约上的balance + 在WETH合约上的balance
@@ -60,7 +65,8 @@ export async function apexCountOfLockStorage(chainId?: ChainId): Promise<number>
       .methods
       .balanceOf(APEX_MAIN_ADRESS)
       .call()
-    return new BigNumber(lp).plus(new BigNumber(weth)).toNumber()
+    const n = new BigNumber(lp).plus(new BigNumber(weth))
+    return parseFloat(web3.utils.fromWei(n.toString(), 'ether'))
   } catch (e) {
     console.log('banance error', e)
     return 0
@@ -68,8 +74,20 @@ export async function apexCountOfLockStorage(chainId?: ChainId): Promise<number>
 }
 
 // 预计年化：总工程师给个公式计算，前端实现。显示USD。
-export function apexForcastAnnualization(): number {
-  return 0
+// rewardPerBlock = rewardRate * SECONDS_PER_DAY / BLOCK_PER_DAY
+// 年华率：rewardPerBlock * 2336000
+// TODO
+export async function apexForcastAnnualization(): Promise<number> {
+  const contract = getApexMainContract()
+  const rewardRate: string = await contract.methods.rewardRate().call()
+  const SECONDS_PER_DAY: string = await contract.methods.SECONDS_PER_DAY().call()
+  const BLOCK_PER_DAY: string = await contract.methods.BLOCK_PER_DAY().call()
+
+  const rewardPerBlock = new BigNumber(rewardRate)
+    .times(new BigNumber(SECONDS_PER_DAY))
+    .div(new BigNumber(BLOCK_PER_DAY))
+  const result = rewardPerBlock.times(new BigNumber(2336000))
+  return result.toNumber()
 }
 
 // 用户帐户信息
@@ -102,7 +120,7 @@ export async function apexStake(amount: number, account: string, address: string
   address = address || APEX_DEFAULT_REFERRER_ADDRESS
   await getApexMainContract()
     .methods
-     // pid, amount, account, refereraddress
+    // pid, amount, account, refereraddress
     .deposit(APEX_STAKE_POOL_ID,
       new BigNumber(amount).times(new BigNumber(10).pow(18)).toString(),
       account,
@@ -160,11 +178,130 @@ export async function apexGetTop10(): Promise<ApexTop10ItemStruct[]> {
   }
 }
 
-export interface ApexDynamicInfoStruct { }
+export async function apexPublishedCounter(): Promise<number> {
+  return await getApexLPTokenContract()
+    .methods
+    .totalSupply()
+    .call()
+}
 
+export interface ApexDynamicInfoStruct {
+  publishedCount: number;
+  holdApexAddress: string;
+  createdAtTimestamp: number;
+  reserveUSD: number;
+  token0Price: number;
+  priceUSD: number;
+  daily: { date: number, priceUSD: number }[];
+  priceIncrease: number;
+  apexIncrease: number;
+}
+
+async function thegraph<T = any>(query: string,
+  url: string = 'https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2'): Promise<T> {
+    try {
+      const response = await axios.post(url, { query })
+      return response.data.data as T
+    } catch (e) {
+      return null as any
+    }
+}
+
+async function getHoldApexAddress(): Promise<string> {
+  try {
+    const url: string =  'http://www.tokenview.com:8088/eth/token/' + APEX_LP_TOKEN_ADRESS
+    const response = await axios(url)
+    return response.data
+  } catch (e) {
+    return ""
+  }
+}
+
+// APEX流动池信息，包括线性图，几乎是在UNISWAP的接口文档里有详细资料。上线后马上根据官方文档对接。
 export async function apexDynamicInfo(): Promise<ApexDynamicInfoStruct> {
-  // APEX流动池信息，包括线性图，几乎是在UNISWAP的接口文档里有详细资料。上线后马上根据官方文档对接。
-  return {}
+  // 上线时间 https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2
+  // get	Pair	createdAtTimestamp
+  // get	Pair	reserveUSD
+  // get	Pair	token0Price
+  const address = '0xd3d2e2692501a5c9ca623199d38826e513033a17'
+  const pair = await thegraph<{
+    pair: {
+      createdAtTimestamp: string,
+      reserveUSD: string,
+      token0Price: string
+    }
+  }>(`{
+    pair(id: "${address}") {
+      createdAtTimestamp
+      reserveUSD
+      token0Price
+    }
+  }`)
+  // 价格涨跌幅就第priceUSD的第二个数据对比第一条的涨跌幅
+  // 这个tokendaydates的priceUSD就是美元价格
+  // 这个连起来就是价格波浪线
+  const daily = await thegraph<{
+    tokenDayDatas: {
+      priceUSD: string,
+      date: number
+    }[]
+  }>(`{
+    tokenDayDatas(orderBy: date, orderDirection: desc, where: {
+      token: "${address}"
+    }) {
+      date
+      priceUSD
+    }
+  }`)
+  // 流动池涨跌幅用这个
+  const apex = await thegraph<{ 
+    pairDayDatas: {
+      reserveUSD: string 
+    }[]
+  }>(`{
+    pairDayDatas(first: 2, orderBy: date, orderDirection: desc, 
+      where: {
+        pairAddress: "${address}",
+        date_gt: 1592505859
+      }
+    ) { 
+      reserveUSD
+    }
+  }`)
+  const holdApexAddress: string = await getHoldApexAddress()
+  const publishedCount: number = await apexPublishedCounter()
+
+  const { pair: { createdAtTimestamp, reserveUSD, token0Price } } = pair
+  const [df, ds] = daily.tokenDayDatas
+  const [af, as] = apex.pairDayDatas
+
+  return {
+    holdApexAddress,
+    publishedCount,
+    createdAtTimestamp: new BigNumber(createdAtTimestamp).toNumber(),
+    reserveUSD: new BigNumber(reserveUSD).toNumber(),
+    token0Price: new BigNumber(token0Price).toNumber(),
+    priceUSD: df ? new BigNumber(df.priceUSD).toNumber() : 0,
+    daily: daily.tokenDayDatas.map(r => {
+      return {
+        date: r.date,
+        priceUSD: new BigNumber(r.priceUSD).toNumber()
+      }
+    }),
+    priceIncrease: df.priceUSD === "0" ? 0 : ((df && ds)
+      ? new BigNumber(ds.priceUSD)
+        .minus(new BigNumber(df.priceUSD))
+        .div(new BigNumber(df.priceUSD))
+        .toNumber()
+      
+      : 0),
+    apexIncrease: af.reserveUSD === "0" ? 0 : ((af && as)
+      ? new BigNumber(as.reserveUSD)
+          .minus(new BigNumber(af.reserveUSD))
+          .div(new BigNumber(af.reserveUSD))
+          .toNumber()
+      : 0)
+  }
 }
 
 // 在不是首矿的情况下，点了加速过后就触发depositWhitelist，然后ApproveLP，然后stakeLP
@@ -242,8 +379,8 @@ export async function apexGetETHInfo(): Promise<ApexETHInfo> {
     }
   })
   const item = response.data.find((r: any) => r.id === 'eth-ethereum')
-  return  {
-    price: item ? item.quotes.USD.price : 0 
+  return {
+    price: item ? item.quotes.USD.price : 0
   }
 }
 

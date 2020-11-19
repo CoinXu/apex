@@ -6,7 +6,7 @@ import {
 
   getApexUserInfo, getApexHaveStarted, getApexDecreaseRewardTime,
   getApexMiningCount, getApexCountOfLockStorage, getApexDynamicInfo, 
-  getApexPrizeAmount
+  getApexPrizeAmount, getApexForcastAnnualization
 } from './actions'
 import { ApexETHInfo, ApexDynamicInfoStruct, ApexTop10ItemStruct, ApexUserInfo } from '../../hooks/apex'
 import { Contract } from 'web3-eth-contract'
@@ -26,6 +26,7 @@ export interface ApexState {
   readonly started: boolean;
   readonly decreaseRewardTime: number;
   readonly mining: number;
+  readonly annualization: number;
   readonly countOfLockStorage: number;
   readonly userInfo: ApexUserInfo;
   readonly top10: ApexTop10ItemStruct[];
@@ -49,10 +50,21 @@ const initialState: ApexState = {
   started: false,
   decreaseRewardTime: 0,
   mining: 0,
+  annualization: 0,
   countOfLockStorage: 0,
   userInfo: { amount: 0, rewardDebt: 0 },
   top10: [],
-  dynamicInfo: {},
+  dynamicInfo: {
+    publishedCount: 0,
+    holdApexAddress: '',
+    token0Price: 1,
+    createdAtTimestamp: 0,
+    priceUSD: 0,
+    reserveUSD: 0,
+    daily: [],
+    priceIncrease: 0,
+    apexIncrease: 0
+  },
   prizeAmount: 0,
   ethInfo: { price: 0 }
 }
@@ -110,5 +122,8 @@ export default createReducer(initialState, builder => {
   })
   .addCase(getApexPrizeAmount, (state, action) => {
     state.prizeAmount = action.payload.amount
+  })
+  .addCase(getApexForcastAnnualization, (state, action) => {
+    state.annualization = action.payload.value
   })
 })

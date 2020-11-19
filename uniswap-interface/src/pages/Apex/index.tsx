@@ -13,7 +13,7 @@ import UnlockPledge from './UnlockPledge'
 import Apex from './Apex'
 import Top10 from './Top10'
 import Intro from './Intro'
-import { apexHarvest, apexForcastAnnualization, apexReceivePrize } from '../../hooks/apex'
+import { apexHarvest, apexReceivePrize } from '../../hooks/apex'
 import { useActiveWeb3React } from '../../hooks'
 import {
   useGetShareCodeCallback, useConsumeShareCodeCallback, useApexState,
@@ -22,7 +22,8 @@ import {
 
   useGetApexHavaStartedCallback, useApexDecreaseRewardTimeCallback,
   useGetApexCountOfLockStorageCallback, useGetTEHDynamicInfo,
-  useGetApexPrizeAmountCallback, useGetApexMiningCountCallback
+  useGetApexPrizeAmountCallback, useGetApexMiningCountCallback,
+  useApexForcastAnnualizationCallback
 } from '../../state/apex/hooks'
 import useParsedQueryString from '../../hooks/useParsedQueryString'
 // import { APEX_MAIN_ADRESS } from '../../constants'
@@ -137,7 +138,7 @@ function Invitation() {
         }}>
           <Box style={{ lineHeight: 1 }} display="flex" sx={{ alignItems: 'center' }}>
             <TYPE.blue fontSize={14} fontWeight={0} mr={11}>≈</TYPE.blue>
-            <TYPE.blue fontSize={30}>${state.mining}</TYPE.blue>
+            <TYPE.blue fontSize={30}>${state.mining * state.dynamicInfo.priceUSD}</TYPE.blue>
           </Box>
           <Box>
             <ButtonPrimary
@@ -163,10 +164,12 @@ function CurrencyPreview() {
   const getApexPrizeAmount = useGetApexPrizeAmountCallback()
   const getApexCountOfLockStorage = useGetApexCountOfLockStorageCallback()
   const getApexETHInfo = useGetTEHDynamicInfo()
+  const getApexForcastAnnualization = useApexForcastAnnualizationCallback()
 
   useEffect(() => { getApexPrizeAmount() }, [account])
   useEffect(() => { if (chainId) getApexCountOfLockStorage(chainId) }, [account])
   useEffect(() => { getApexETHInfo() }, [])
+  useEffect(() => { getApexForcastAnnualization() }, [])
 
   return (
     <>
@@ -191,13 +194,14 @@ function CurrencyPreview() {
             <TYPE.blue fontWeight={0}>预计年化：</TYPE.blue>
           </Box>
           <Box>
-          <TYPE.blue textAlign="right">{apexForcastAnnualization()} %</TYPE.blue>
+          <TYPE.blue textAlign="right">{state.annualization} %</TYPE.blue>
           </Box>
           <Box>
             <TYPE.blue fontWeight={0}>奖金池：</TYPE.blue>
           </Box>
-          <Box style={{ textAlign: 'right' }} sx={{
-            display: 'flex'
+          <Box sx={{
+            display: 'flex',
+            justifyContent: 'flex-end'
           }}>
             <ButtonPrimary
               onClick={() => state.mainContract && account && apexReceivePrize(account)}
@@ -281,7 +285,7 @@ function DecreaseRewardTime() {
       <CountDown 
         overtime
         autoStart
-        date={Date.now() + state.decreaseRewardTime} 
+        date={new Date(state.decreaseRewardTime * 1000)} 
         renderer={CountDownRender} />
     </>
   )

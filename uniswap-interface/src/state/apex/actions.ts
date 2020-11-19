@@ -21,4 +21,5 @@ export const getApexTop10 = createAction<{ list: ApexTop10ItemStruct[] }>('apex/
 export const getApexDynamicInfo = createAction<{ info: ApexDynamicInfoStruct }>('apex/getApexDynamicInfo')
 export const getApexPrizeAmount = createAction<{ amount: number }>('apex/getApexPrizeAmount')
 export const getApexETHInfo = createAction<{ info: ApexETHInfo }>('apex/getApexETHInfo')
+export const getApexForcastAnnualization = createAction<{ value: number }>('apex/getApexForcastAnnualization')
 

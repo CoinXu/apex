@@ -55,7 +55,7 @@ export default function Top10() {
       <CountDown 
         overtime
         autoStart
-        date={Date.now() + state.decreaseRewardTime} 
+        date={new Date(state.decreaseRewardTime * 1000)} 
         renderer={CountDownRender} />
       <Box pt={16} sx={{
         display: 'grid',
